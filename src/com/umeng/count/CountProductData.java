@@ -1,8 +1,5 @@
 package com.umeng.count;
 
-
-
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -10,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class CountProductData extends SQLiteOpenHelper {
 
-	public static final String TB_NAME = "userCount";// 琛ㄥ悕瀛�
+	public static final String TB_NAME = "userCount";// 表名字
 	public static final String RANDOMEK = "randomk";
 	public static final String USERTYPE = "usertype";
 	public static final String PRODUCTID = "productId";
@@ -29,7 +26,7 @@ public class CountProductData extends SQLiteOpenHelper {
 	public static CountProductData getIntence(Context context) {
 
 		if (mCountProduct == null) {
-			mCountProduct = new CountProductData(context, "count.db", null, 1);
+			mCountProduct = new CountProductData(context, "count.db", null, 2);
 		}
 		mCountProduct.mContext = context;
 
@@ -55,14 +52,16 @@ public class CountProductData extends SQLiteOpenHelper {
 
 	public void onCreate(SQLiteDatabase db) {
 
-		db.execSQL("CREATE TABLE IF NOT EXISTS " + TB_NAME + " (" + RANDOMEK
-				+ " INTEGER," + PRODUCTID + " text PRIMARY KEY," + RUNT
-				+ " text," + STATE + " INTEGER," + USERTYPE + " text)");
+		db.execSQL("CREATE TABLE IF NOT EXISTS " + TB_NAME + " ("
+				+ "ID INTEGER PRIMARY KEY autoincrement not null," + RANDOMEK
+				+ " INTEGER," + PRODUCTID + " text," + RUNT + " text," + STATE
+				+ " INTEGER," + USERTYPE + " text)");
 
 	}
 
-	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
-
+	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
+		db.execSQL("DROP TABLE " + TB_NAME);
+		onCreate(db);
 	}
 
 }
