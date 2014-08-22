@@ -1,6 +1,5 @@
 package com.umeng.count;
 
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,11 +24,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
 public class CountManager {
+	private static final String TAG = CountManager.class.getSimpleName();
 
 	public static final String COUNT_ACTION_ROTATION_NEWUSER = "count_action_rotation_newuser";
 
@@ -39,10 +42,9 @@ public class CountManager {
 
 	public static final String COUNT_ACTION_END_NEWUSER = "count_action_end_newuser";
 
-	Context mContext;
-	// String mUrl =
-	// "http://androiddailyyogacn.oss-cn-hangzhou.aliyuncs.com/count/";
-	String mUrl = "https://s3.amazonaws.com/appmessage121119/memorybooster/test/";
+	Context mContext = null;
+	String mUrl = null;
+	String mKey = null;
 
 	public static class CountArg {
 
@@ -93,7 +95,9 @@ public class CountManager {
 
 	"pageName_4_4",
 
-	"pageName_4_5", "pageName_5_1",
+	"pageName_4_5",
+
+	"pageName_5_1",
 
 	"pageName_5_2",
 
@@ -113,13 +117,14 @@ public class CountManager {
 	private CountManager(Context context) {
 
 		mContext = context;
-		// mUrl = url;
+		mKey = getKey();
+		mUrl = getUrl();
 
 	}
 
 	private static CountManager mCountManager;
 
-	public static CountManager getCountInstenc(Context context) {
+	public static CountManager instance(Context context) {
 
 		if (mCountManager == null) {
 			mCountManager = new CountManager(context);
@@ -193,7 +198,7 @@ public class CountManager {
 				cursor.close();
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
@@ -277,7 +282,7 @@ public class CountManager {
 
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
@@ -513,7 +518,7 @@ public class CountManager {
 				sycSqlite.insert(CountProductData.TB_NAME, null, contentValues);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			Log.e("UmengCount", "updateDBfromServer()", e);
 		}
 
 	}
@@ -524,7 +529,6 @@ public class CountManager {
 	 * @return
 	 * @throws IOException
 	 */
-
 	private int getDataVcfromServer() throws IOException {
 		int version = 1;
 		try {
@@ -542,7 +546,7 @@ public class CountManager {
 			mHttpURLConnection.disconnect();
 			version = Integer.parseInt(new String(versionDate).trim());
 		} catch (Exception e) {
-			// TODO: handle exception
+			Log.e("UmengCount", "getDataVcfromServer()", e);
 		}
 		return version;
 	}
@@ -568,7 +572,7 @@ public class CountManager {
 		AlarmManager am = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 500, 1000 * 60 ,
+				System.currentTimeMillis() + 500, 1000 * 60,
 				getIntent(mContext, COUNT_ACTION_ROTATION_NEWUSER));
 
 		// 注册老用户轮训闹钟30 分钟后开始轮训
@@ -586,4 +590,62 @@ public class CountManager {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
+	// http://stackoverflow.com/questions/19379349/android-get-manifest-meta-data-out-of-activity
+	// http://yidongkaifa.iteye.com/blog/1780444
+	public Bundle getMetaData(Context context) {
+		Bundle result = null;
+		try {
+			result = context.getPackageManager().getApplicationInfo(
+					context.getPackageName(), PackageManager.GET_META_DATA).metaData;
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Could not read meta data in the manifest.", e);
+		}
+		return result;
+	}
+
+	//Manifest:
+	//<meta-data android:name="umeng_key" android:value="..." />
+	public String getKey() {
+		Bundle b = getMetaData(mContext);
+		return b.getString("umeng_key");
+	}
+
+	//Manifest:
+	//<meta-data android:name="umeng_url" android:value="..." />
+	public String getUrl() {
+		Bundle b = getMetaData(mContext);
+		return b.getString("umeng_url");
+	}
+
+	public void checkUmengConfig() {
+		SharedPreferences sp = mContext.getSharedPreferences(
+				mContext.getPackageName(), 0);
+		if (sp.getBoolean("is_umeng_config_cleared", true)) {
+			sp.edit().putBoolean("is_umeng_config_cleared", false).commit();
+			SharedPreferences umeng_sp = mContext.getSharedPreferences(
+					"umeng_general_config", 0);
+			umeng_sp.edit().clear().commit();
+		}
+	}
+
+	public void onCreate(Context context) {
+		Log.i(TAG, "onCreate()");
+		MobclickAgent.setDebugMode(true);
+		MobclickAgent.updateOnlineConfig(context);
+		MobclickAgent.openActivityDurationTrack(false);
+		CountManager.instance(context).checkUmengConfig();
+	}
+
+	public void onResume(Context context, String pageName) {
+		Log.i(TAG, "onResume()");
+		MobclickAgent.onPageStart(pageName);
+		MobclickAgent.onResume(context, getKey(), "");
+	}
+
+	public void onPause(Context context, String pageName) {
+		Log.i(TAG, "onPause()");
+		MobclickAgent.onPageEnd(pageName);
+		MobclickAgent.onPause(context);
+	}
 }

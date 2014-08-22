@@ -28,7 +28,7 @@ public class PresentReceiver extends BroadcastReceiver {
 				sharedPreferences.edit().putBoolean("isclear", false).commit();
 			}
 
-			CountManager countManager = CountManager.getCountInstenc(context);
+			CountManager countManager = CountManager.instance(context);
 			// 检测轮训闹钟是否存活
 			countManager.checkUpdateAlartRotation();
 			// 检测参数更新
@@ -37,7 +37,7 @@ public class PresentReceiver extends BroadcastReceiver {
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_ROTATION_NEWUSER.equals(intent
 						.getAction())) {
-			CountManager countManager = CountManager.getCountInstenc(context);
+			CountManager countManager = CountManager.instance(context);
 			CountArg countArg = countManager.getAlarmNewUserArg();
 			if (getRandomK() < countArg.mRandomK) {
 
@@ -50,7 +50,7 @@ public class PresentReceiver extends BroadcastReceiver {
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_ROTATION_ODLEUSER.equals(intent
 						.getAction())) {
-			CountManager countManager = CountManager.getCountInstenc(context);
+			CountManager countManager = CountManager.instance(context);
 			CountArg countArg = countManager.getAlarmOdleUserArg();
 			if (getRandomK() < countArg.mRandomK) {
 				// 开始统计老用户

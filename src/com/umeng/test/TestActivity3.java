@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class TestActivity2 extends UmengActivity implements OnClickListener {
+public class TestActivity3 extends UmengActivity implements OnClickListener {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -18,7 +18,7 @@ public class TestActivity2 extends UmengActivity implements OnClickListener {
 	}
 
 	public void onClick(View v) {
-		startActivity(new Intent(this, TestActivity3.class));
+		startActivity(new Intent(this, TestActivity4.class));
 	}
 
 }
