@@ -45,6 +45,31 @@
             </intent-filter>
         </receiver>
 
+        <!-- All-In-One Toolbox -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_key" -->
+        <!-- android:value="535f6f3656240beac200b7cc" /> -->
+
+
+        <!-- Memory Booster -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_key" -->
+        <!-- android:value="535f7dcb56240beac501290c" /> -->
+
+
+        <!-- Battery Booster -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_key" -->
+        <!-- android:value="535f7ef256240beab10151da" /> -->
+
+
+        <!-- 测试2 -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_key" -->
+        <!-- android:value="53f5bf90fd98c538f80041a8" /> -->
+
+
+        <!-- 测试 -->
         <meta-data
             android:name="umeng_key"
             android:value="53f3ffc4fd98c5ff07017771" />
