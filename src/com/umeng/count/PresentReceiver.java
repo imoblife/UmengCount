@@ -15,7 +15,6 @@ public class PresentReceiver extends BroadcastReceiver {
 
 	public void onReceive(Context context, Intent intent) {
 
-		Log.i("11", "1111");
 		if (intent != null
 				&& Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
 

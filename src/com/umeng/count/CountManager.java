@@ -120,6 +120,10 @@ public class CountManager {
 		mKey = getKey();
 		mUrl = getUrl();
 
+		if (mKey == null || mUrl == null) {
+			throw new RuntimeException("mKey == null || mUrl == null");
+		}
+		
 	}
 
 	private static CountManager mCountManager;
