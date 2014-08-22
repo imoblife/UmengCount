@@ -1,7 +1,5 @@
 package com.umeng.count;
 
-
-
 import java.util.Random;
 
 import com.umeng.analytics.MobclickAgent;
@@ -17,6 +15,7 @@ public class PresentReceiver extends BroadcastReceiver {
 
 	public void onReceive(Context context, Intent intent) {
 
+		Log.i("11", "1111");
 		if (intent != null
 				&& Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
 
@@ -28,58 +27,54 @@ public class PresentReceiver extends BroadcastReceiver {
 				umPreferences.edit().clear().commit();
 				sharedPreferences.edit().putBoolean("isclear", false).commit();
 			}
-			
-			CountManager countManager = CountManager.instance(context);
-			// 妫�祴杞闂归挓鏄惁瀛樻椿
+
+			CountManager countManager = CountManager.getCountInstenc(context);
+			// 检测轮训闹钟是否存活
 			countManager.checkUpdateAlartRotation();
-			// 妫�祴鍙傛暟鏇存柊
+			// 检测参数更新
 			countManager.updateCountProductData();
 
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_ROTATION_NEWUSER.equals(intent
 						.getAction())) {
-			CountManager countManager = CountManager.instance(context);
+			CountManager countManager = CountManager.getCountInstenc(context);
 			CountArg countArg = countManager.getAlarmNewUserArg();
 			if (getRandomK() < countArg.mRandomK) {
 
-				// 寮�缁熻鏂扮敤鎴�
+				// 开始统计新用户
 				countManager.startCountNewUser();
 			}
-			// 鍒锋柊杞闂归挓鐨勬椂闂淬�
+			// 刷新轮训闹钟的时间。
 			countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
 
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_ROTATION_ODLEUSER.equals(intent
 						.getAction())) {
-			CountManager countManager = CountManager.instance(context);
+			CountManager countManager = CountManager.getCountInstenc(context);
 			CountArg countArg = countManager.getAlarmOdleUserArg();
 			if (getRandomK() < countArg.mRandomK) {
-				// 寮�缁熻鑰佺敤鎴�
+				// 开始统计老用户
 				countManager.startCountOdleUser();
 			}
-			// 鍒锋柊杞闂归挓鐨勬椂闂淬�
+			// 刷新轮训闹钟的时间。
 			countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
 
-			// 缁熻鏂扮敤鎴风粨鏉�
+			// 统计新用户结束
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_END_NEWUSER.equals(intent
 						.getAction())) {
-			// 缁撴潫缁熻
+			// 结束统计
 			String name = intent.getStringExtra("name");
-			Log.i("countEnd", CountManager.COUNT_ACTION_END_NEWUSER
-					+ "end name=" + name);
-			MobclickAgent.onPageEnd(name); // 淇濊瘉 onPageEnd 鍦╫nPause
+			MobclickAgent.onPageEnd(name); // 保证 onPageEnd 在onPause
 			MobclickAgent.onPause(context);
 
-			// 缁熻鑰佺敤鎴风粨鏉�
+			// 统计老用户结束
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_END_ODLEUSER.equals(intent
 						.getAction())) {
-			// 缁撴潫缁熻
+			// 结束统计
 			String name = intent.getStringExtra("name");
-			Log.i("countEnd", CountManager.COUNT_ACTION_END_ODLEUSER
-					+ " end name= " + name);
-			MobclickAgent.onPageEnd(name); // 淇濊瘉 onPageEnd 鍦╫nPause
+			MobclickAgent.onPageEnd(name); // 保证 onPageEnd 在onPause
 			MobclickAgent.onPause(context);
 
 		}

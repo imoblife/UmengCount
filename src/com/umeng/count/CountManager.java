@@ -1,7 +1,6 @@
 package com.umeng.count;
 
 
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,14 +42,14 @@ public class CountManager {
 	Context mContext;
 	// String mUrl =
 	// "http://androiddailyyogacn.oss-cn-hangzhou.aliyuncs.com/count/";
-	String mUrl = "https://s3.amazonaws.com/appmessage121119/memorybooster/umeng/";
+	String mUrl = "https://s3.amazonaws.com/appmessage121119/memorybooster/test/";
 
 	public static class CountArg {
 
-		public int mCount; // 涓�ぉ鍚姩 鍑犳
-		public int mRandomK;// 鍚姩姒傜巼
-		public int mRunT;// 杩愯鏃堕棿
-		public boolean mRunMode;// 杩愯鏂瑰紡
+		public int mCount; // 一天启动 几次
+		public int mRandomK;// 启动概率
+		public int mRunT;// 运行时间
+		public boolean mRunMode;// 运行方式
 
 	}
 
@@ -94,9 +93,7 @@ public class CountManager {
 
 	"pageName_4_4",
 
-	"pageName_4_5", 
-	
-	"pageName_5_1",
+	"pageName_4_5", "pageName_5_1",
 
 	"pageName_5_2",
 
@@ -122,7 +119,7 @@ public class CountManager {
 
 	private static CountManager mCountManager;
 
-	public static CountManager instance(Context context) {
+	public static CountManager getCountInstenc(Context context) {
 
 		if (mCountManager == null) {
 			mCountManager = new CountManager(context);
@@ -155,7 +152,7 @@ public class CountManager {
 	}
 
 	/**
-	 * 寮�缁熻鏂扮敤鎴�
+	 * 开始统计新用户
 	 */
 	public void startCountNewUser() {
 		try {
@@ -179,7 +176,7 @@ public class CountManager {
 				ContentValues contentValues = new ContentValues();
 				contentValues.put(CountProductData.STATE,
 						CountProductData.COUNTCOMPLITE);
-				// 灏嗙姸鎬佹洿鏂颁负宸茬粺璁�
+				// 将状态更新为已统计
 				sqlite.update(CountProductData.TB_NAME, contentValues,
 						CountProductData.PRODUCTID + "=?",
 						new String[] { mAppId });
@@ -210,15 +207,10 @@ public class CountManager {
 
 	private void startCountReceiver(String name, String action, String appId,
 			int runT) {
-
-		Log.i("countStart", "start  action=" + action + " appId=" + appId
-				+ " name=" + name + " runT=" + runT);
-
 		MobclickAgent.openActivityDurationTrack(false);
-		MobclickAgent.onPageStart(name); // 缁熻椤甸潰
+		MobclickAgent.onPageStart(name); // 统计页面
 		MobclickAgent.onResume(mContext, appId, null);
 		setEndAlarmTime(mContext, action, runT, name, appId);
-
 	}
 
 	private void setEndAlarmTime(Context context, String action, int runT,
@@ -239,7 +231,7 @@ public class CountManager {
 
 	/**
 	 * 
-	 * @param 寮�缁熻鑰佺敤鎴�
+	 * @param 开始统计老用户
 	 */
 	public void startCountOdleUser() {
 		try {
@@ -270,8 +262,6 @@ public class CountManager {
 			Random k = new Random();
 
 			int index = (k.nextInt() >>> 1) % productId.size();
-			Log.i("count", "odle product list =" + productId.size() + "index="
-					+ index);
 			if (productId.size() > 0) {
 				String appId = productId.get(index);
 
@@ -292,7 +282,7 @@ public class CountManager {
 	}
 
 	/**
-	 * 鑾峰彇瀵硅疆璁柊鐢ㄦ埛鐨勯椆閽熷弬鏁帮紱
+	 * 获取对轮训新用户的闹钟参数；
 	 * 
 	 * @return
 	 */
@@ -309,7 +299,7 @@ public class CountManager {
 	}
 
 	/**
-	 * 鑾峰彇瀵硅疆璁�鐢ㄦ埛鐨勯椆閽熷弬鏁帮紱
+	 * 获取对轮训老用户的闹钟参数；
 	 * 
 	 * @return
 	 */
@@ -326,14 +316,10 @@ public class CountManager {
 
 	}
 
-	// 浠庢湇鍔″櫒鏇存柊鏁版嵁搴�
+	// 从服务器更新数据库
 	public void updateCountProductData() {
 
-		Log.i("count", "updateCountProductData");
-
 		if (isCheckUpdate()) {
-
-			Log.i("count", "updateCountProductData isCheckUpdate true");
 
 			new Thread() {
 
@@ -342,7 +328,6 @@ public class CountManager {
 					synchronized ("updateData") {
 						try {
 							int vc = getDataVcfromServer();
-							Log.i("count", "count vc=" + vc);
 							if (vc > getDataVCformLocal()) {
 								updateDBfromServer();
 								setDataVc(vc);
@@ -439,7 +424,6 @@ public class CountManager {
 			mHttpURLConnection.disconnect();
 
 			JSONObject jsonObject = new JSONObject(new String(content).trim());
-			Log.i("countContent", jsonObject.toString());
 			JSONObject newUser = jsonObject.getJSONObject("newUser");
 
 			SharedPreferences preferences = mContext.getSharedPreferences(
@@ -458,7 +442,7 @@ public class CountManager {
 			editor.commit();
 			SycSqlite sycSqlite = CountProductData.getIntence(mContext)
 					.getSqlite();
-			// 鍒犻櫎绛夊緟缁熻鐨勭敤鎴枫�
+			// 删除等待统计的用户。
 			sycSqlite.delete(CountProductData.TB_NAME,
 					CountProductData.USERTYPE + "=? and "
 							+ CountProductData.STATE + "=?", new String[] {
@@ -476,7 +460,7 @@ public class CountManager {
 						new String[] { product.getString("appId") }, null,
 						null, null);
 
-				// 鍓旈櫎宸茬粡缁熻杩囩殑app
+				// 剔除已经统计过的app
 
 				if (!cursor.moveToFirst()) {
 
@@ -506,7 +490,7 @@ public class CountManager {
 			editor.putInt("runT", odle.getInt("runT"));
 			editor.commit();
 
-			// 鍒犻櫎缁熻鑰佺敤鎴风殑 Id;
+			// 删除统计老用户的 Id;
 			sycSqlite.delete(CountProductData.TB_NAME,
 					CountProductData.USERTYPE + "=?",
 					new String[] { "oldUser" });
@@ -535,7 +519,7 @@ public class CountManager {
 	}
 
 	/**
-	 * 鑾峰彇鏈嶅姟鍣ㄧ鏁版嵁鐗堟湰鍙�
+	 * 获取服务器端数据版本号
 	 * 
 	 * @return
 	 * @throws IOException
@@ -557,7 +541,6 @@ public class CountManager {
 			inputStream.close();
 			mHttpURLConnection.disconnect();
 			version = Integer.parseInt(new String(versionDate).trim());
-			Log.i("sv", "version" + version);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -565,7 +548,7 @@ public class CountManager {
 	}
 
 	/**
-	 * 妫�祴 闂归挓鏄惁娲荤潃
+	 * 检测 闹钟是否活着
 	 */
 	public void checkUpdateAlartRotation() {
 
@@ -576,24 +559,23 @@ public class CountManager {
 	}
 
 	/**
-	 * 鏇存柊杞闂归挓
+	 * 更新轮训闹钟
 	 */
 	private void updateAlartRotation() {
 
-		// 娉ㄥ唽鏂扮敤鎴疯疆璁椆閽�绔嬪嵆寮�杞
+		// 注册新用户轮训闹钟 立即开始轮询
 		int count = getAlarmNewUserArg().mCount;
 		AlarmManager am = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 500, 24 * 1000 * 60 * 60 / count,
+				System.currentTimeMillis() + 500, 1000 * 60 ,
 				getIntent(mContext, COUNT_ACTION_ROTATION_NEWUSER));
 
-		// 娉ㄥ唽鑰佺敤鎴疯疆璁椆閽�0 鍒嗛挓鍚庡紑濮嬭疆璁�
+		// 注册老用户轮训闹钟30 分钟后开始轮训
 		count = getAlarmOdleUserArg().mCount;
 		am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 1000 * 60 * 30, 24 * 1000 * 60
-						* 60 / count,
+				System.currentTimeMillis() + 1000 * 60 * 1, 1000 * 60 * 2,
 				getIntent(mContext, COUNT_ACTION_ROTATION_ODLEUSER));
 	}
 

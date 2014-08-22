@@ -1,7 +1,6 @@
 package com.umeng.count;
 
 
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +18,7 @@ public class CountActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mName = getIntent().getStringExtra("name");
 		mAppId = getIntent().getStringExtra("appId");
+
 	}
 
 	protected void onResume() {
