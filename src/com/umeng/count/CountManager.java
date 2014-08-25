@@ -642,13 +642,13 @@ public class CountManager {
 	}
 
 	public void onResume(Context context, String pageName) {
-		Log.i(TAG, "onResume()");
+		Log.i(TAG, "onResume(): " + pageName);
 		MobclickAgent.onPageStart(pageName);
 		MobclickAgent.onResume(context, getKey(), "");
 	}
 
 	public void onPause(Context context, String pageName) {
-		Log.i(TAG, "onPause()");
+		Log.i(TAG, "onPause(): " + pageName);
 		MobclickAgent.onPageEnd(pageName);
 		MobclickAgent.onPause(context);
 	}
