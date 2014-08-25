@@ -43,8 +43,7 @@ public class CountManager {
 
 	private final String CountName = "CountManagerV1";
 
-	Context mContext;
-	String mUrl = "http://androiddailyyogacn.oss-cn-hangzhou.aliyuncs.com/count/";
+	Context mContext = null;
 
 	public static class CountArg {
 
@@ -115,7 +114,10 @@ public class CountManager {
 	private CountManager(Context context) {
 
 		mContext = context;
-		// mUrl = url;
+
+		if (getKey() == null || getUrl() == null) {
+			throw new RuntimeException("getKey() == null || getUrl() == null");
+		}
 
 	}
 
@@ -415,7 +417,7 @@ public class CountManager {
 	private void updateDBfromServer() throws MalformedURLException,
 			IOException, JSONException {
 
-		URL url = new URL(mUrl + "countContent.json");
+		URL url = new URL(getUrl() + "countContent.json");
 
 		HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
 				.openConnection();
@@ -525,7 +527,7 @@ public class CountManager {
 	 */
 
 	private int getDataVcfromServer() throws IOException {
-		URL url = new URL(mUrl + "countVc.txt");
+		URL url = new URL(getUrl() + "countVc.txt");
 		HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
 				.openConnection();
 		byte[] versionDate = new byte[mHttpURLConnection.getContentLength()];
@@ -600,14 +602,18 @@ public class CountManager {
 	//<meta-data android:name="umeng_key" android:value="..." />
 	public String getKey() {
 		Bundle b = getMetaData(mContext);
-		return b.getString("umeng_key");
+		String key = b.getString("umeng_key");
+		Log.i(getClass().getSimpleName(), "getKey(): " + key);
+		return key;
 	}
 
 	//Manifest:
 	//<meta-data android:name="umeng_url" android:value="..." />
 	public String getUrl() {
 		Bundle b = getMetaData(mContext);
-		return b.getString("umeng_url");
+		String url = b.getString("umeng_url");
+		Log.i(getClass().getSimpleName(), "getUrl(): " + url);
+		return url;
 	}
 
 	public void checkUmengConfig() {
