@@ -49,18 +49,27 @@
         <!-- <meta-data -->
         <!-- android:name="umeng_key" -->
         <!-- android:value="535f6f3656240beac200b7cc" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_url" -->
+        <!-- android:value="https://s3.amazonaws.com/appmessage121119/aio/umeng/" /> -->
 
 
         <!-- Memory Booster -->
         <!-- <meta-data -->
         <!-- android:name="umeng_key" -->
         <!-- android:value="535f7dcb56240beac501290c" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_url" -->
+        <!-- android:value="https://s3.amazonaws.com/appmessage121119/memorybooster/umeng/" /> -->
 
 
         <!-- Battery Booster -->
         <!-- <meta-data -->
         <!-- android:name="umeng_key" -->
         <!-- android:value="535f7ef256240beab10151da" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_url" -->
+        <!-- android:value="https://s3.amazonaws.com/appmessage121119/batterybooster/umeng/" /> -->
 
 
         <!-- 测试2 -->
