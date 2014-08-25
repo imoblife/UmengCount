@@ -72,12 +72,6 @@
         <!-- android:value="https://s3.amazonaws.com/appmessage121119/batterybooster/umeng/" /> -->
 
 
-        <!-- 测试2 -->
-        <!-- <meta-data -->
-        <!-- android:name="umeng_key" -->
-        <!-- android:value="53f5bf90fd98c538f80041a8" /> -->
-
-
         <!-- 测试 -->
         <meta-data
             android:name="umeng_key"
