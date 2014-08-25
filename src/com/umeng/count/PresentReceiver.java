@@ -15,66 +15,90 @@ public class PresentReceiver extends BroadcastReceiver {
 
 	public void onReceive(Context context, Intent intent) {
 
+		Log.d("count", "count" + intent.getAction());
+
 		if (intent != null
 				&& Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
 
-			SharedPreferences sharedPreferences = context.getSharedPreferences(
-					context.getPackageName(), 0);
-			if (sharedPreferences.getBoolean("isclear", true)) {
-				SharedPreferences umPreferences = context.getSharedPreferences(
-						"umeng_general_config", 0);
-				umPreferences.edit().clear().commit();
-				sharedPreferences.edit().putBoolean("isclear", false).commit();
+			try {
+				CountManager countManager = CountManager
+						.instance(context);
+				// 妫€娴嬭疆璁椆閽熸槸鍚﹀瓨娲?
+				countManager.checkUpdateAlartRotation();
+				// 妫€娴嬪弬鏁版洿鏂?
+				countManager.updateCountProductData();
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
-
-			CountManager countManager = CountManager.instance(context);
-			// 检测轮训闹钟是否存活
-			countManager.checkUpdateAlartRotation();
-			// 检测参数更新
-			countManager.updateCountProductData();
 
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_ROTATION_NEWUSER.equals(intent
 						.getAction())) {
-			CountManager countManager = CountManager.instance(context);
-			CountArg countArg = countManager.getAlarmNewUserArg();
-			if (getRandomK() < countArg.mRandomK) {
 
-				// 开始统计新用户
-				countManager.startCountNewUser();
+			try {
+				CountManager countManager = CountManager
+						.instance(context);
+				CountArg countArg = countManager.getAlarmNewUserArg();
+				if (getRandomK() < countArg.mRandomK) {
+
+					// 寮€濮嬬粺璁℃柊鐢ㄦ埛
+					countManager.startCountNewUser();
+				}
+				// 鍒锋柊杞闂归挓鐨勬椂闂淬€?
+				countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
-			// 刷新轮训闹钟的时间。
-			countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
 
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_ROTATION_ODLEUSER.equals(intent
 						.getAction())) {
-			CountManager countManager = CountManager.instance(context);
-			CountArg countArg = countManager.getAlarmOdleUserArg();
-			if (getRandomK() < countArg.mRandomK) {
-				// 开始统计老用户
-				countManager.startCountOdleUser();
-			}
-			// 刷新轮训闹钟的时间。
-			countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
 
-			// 统计新用户结束
+			try {
+				CountManager countManager = CountManager
+						.instance(context);
+				CountArg countArg = countManager.getAlarmOdleUserArg();
+				if (getRandomK() < countArg.mRandomK) {
+					// 寮€濮嬬粺璁¤€佺敤鎴?
+					countManager.startCountOdleUser();
+				}
+				// 鍒锋柊杞闂归挓鐨勬椂闂淬€?
+				countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
+
+				// 缁熻鏂扮敤鎴风粨鏉?
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_END_NEWUSER.equals(intent
 						.getAction())) {
-			// 结束统计
-			String name = intent.getStringExtra("name");
-			MobclickAgent.onPageEnd(name); // 保证 onPageEnd 在onPause
-			MobclickAgent.onPause(context);
 
-			// 统计老用户结束
+			try {
+				// 缁撴潫缁熻
+				String name = intent.getStringExtra("name");
+				Log.d("countEnd", CountManager.COUNT_ACTION_END_NEWUSER
+						+ "end name=" + name);
+				MobclickAgent.onPageEnd(name); // 淇濊瘉 onPageEnd 鍦╫nPause
+				MobclickAgent.onPause(context);
+				// 缁熻鑰佺敤鎴风粨鏉?
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_END_ODLEUSER.equals(intent
 						.getAction())) {
-			// 结束统计
-			String name = intent.getStringExtra("name");
-			MobclickAgent.onPageEnd(name); // 保证 onPageEnd 在onPause
-			MobclickAgent.onPause(context);
+			try {
+				// 缁撴潫缁熻
+				String name = intent.getStringExtra("name");
+				Log.d("countEnd", CountManager.COUNT_ACTION_END_ODLEUSER
+						+ " end name= " + name);
+				MobclickAgent.onPageEnd(name); // 淇濊瘉 onPageEnd 鍦╫nPause
+				MobclickAgent.onPause(context);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 
 		}
 	}
@@ -86,3 +110,4 @@ public class PresentReceiver extends BroadcastReceiver {
 	}
 
 }
+

@@ -60,23 +60,23 @@ public class SycSqlite {
 
 	}
 
-	public long replace(String table, String nullColumnHack,
-			ContentValues initialValues) {
-		Assert.assertNotNull(database);
-		synchronized (SycSqlite.class) {
-			return database.replace(table, nullColumnHack, initialValues);
-		}
-
-	}
-
-	public long replaceOrThrow(String table, String nullColumnHack,
-			ContentValues initialValues) {
-		Assert.assertNotNull(database);
-		synchronized (SycSqlite.class) {
-			return database
-					.replaceOrThrow(table, nullColumnHack, initialValues);
-		}
-	}
+	// public long replace(String table, String nullColumnHack,
+	// ContentValues initialValues) {
+	// Assert.assertNotNull(database);
+	// synchronized (SycSqlite.class) {
+	// return database.replace(table, nullColumnHack, initialValues);
+	// }
+	//
+	// }
+	//
+	// public long replaceOrThrow(String table, String nullColumnHack,
+	// ContentValues initialValues) {
+	// Assert.assertNotNull(database);
+	// synchronized (SycSqlite.class) {
+	// return database
+	// .replaceOrThrow(table, nullColumnHack, initialValues);
+	// }
+	// }
 
 	public Cursor rawQuery(String sqlitCommand) {
 
@@ -106,3 +106,4 @@ public class SycSqlite {
 	}
 
 }
+

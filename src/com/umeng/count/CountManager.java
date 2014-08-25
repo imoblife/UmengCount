@@ -32,7 +32,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class CountManager {
-	private static final String TAG = CountManager.class.getSimpleName();
 
 	public static final String COUNT_ACTION_ROTATION_NEWUSER = "count_action_rotation_newuser";
 
@@ -42,16 +41,17 @@ public class CountManager {
 
 	public static final String COUNT_ACTION_END_NEWUSER = "count_action_end_newuser";
 
-	Context mContext = null;
-	String mUrl = null;
-	String mKey = null;
+	private final String CountName = "CountManagerV1";
+
+	Context mContext;
+	String mUrl = "http://androiddailyyogacn.oss-cn-hangzhou.aliyuncs.com/count/";
 
 	public static class CountArg {
 
-		public int mCount; // 一天启动 几次
-		public int mRandomK;// 启动概率
-		public int mRunT;// 运行时间
-		public boolean mRunMode;// 运行方式
+		public int mCount; // 涓€澶╁惎鍔?鍑犳
+		public int mRandomK;// 鍚姩姒傜巼
+		public int mRunT;// 杩愯鏃堕棿
+		public boolean mRunMode;// 杩愯鏂瑰紡
 
 	}
 
@@ -95,9 +95,7 @@ public class CountManager {
 
 	"pageName_4_4",
 
-	"pageName_4_5",
-
-	"pageName_5_1",
+	"pageName_4_5", "pageName_5_1",
 
 	"pageName_5_2",
 
@@ -117,13 +115,8 @@ public class CountManager {
 	private CountManager(Context context) {
 
 		mContext = context;
-		mKey = getKey();
-		mUrl = getUrl();
+		// mUrl = url;
 
-		if (mKey == null || mUrl == null) {
-			throw new RuntimeException("mKey == null || mUrl == null");
-		}
-		
 	}
 
 	private static CountManager mCountManager;
@@ -143,7 +136,7 @@ public class CountManager {
 	public String getPageName() {
 
 		SharedPreferences preferences = mContext.getSharedPreferences(
-				"CountManager", 0);
+				CountName, 0);
 
 		int index = preferences.getInt("index", 0);
 
@@ -161,49 +154,43 @@ public class CountManager {
 	}
 
 	/**
-	 * 开始统计新用户
+	 * 寮€濮嬬粺璁℃柊鐢ㄦ埛
 	 */
 	public void startCountNewUser() {
-		try {
 
-			SycSqlite sqlite = CountProductData.getIntence(mContext)
-					.getSqlite();
+		SycSqlite sqlite = CountProductData.getIntence(mContext).getSqlite();
 
-			Cursor cursor = sqlite.query(CountProductData.TB_NAME,
-					new String[] { CountProductData.PRODUCTID,
-							CountProductData.RANDOMEK,
+		Cursor cursor = sqlite.query(CountProductData.TB_NAME, new String[] {
+				CountProductData.PRODUCTID, CountProductData.RANDOMEK,
 
-					}, CountProductData.USERTYPE + "= ? and "
-							+ CountProductData.STATE + "=?", new String[] {
-							"newUser", CountProductData.COUNTWAIT + "" }, null,
-					null, CountProductData.RANDOMEK + " desc");
+		}, CountProductData.USERTYPE + "= ? and " + CountProductData.STATE
+				+ "=?", new String[] { "newUser",
+				CountProductData.COUNTWAIT + "" }, null, null,
+				CountProductData.RANDOMEK + " desc");
 
-			if (cursor.moveToFirst()) {
+		if (cursor.moveToFirst()) {
 
-				String mAppId = cursor.getString(0);
-				String mName = getPageName();
-				ContentValues contentValues = new ContentValues();
-				contentValues.put(CountProductData.STATE,
-						CountProductData.COUNTCOMPLITE);
-				// 将状态更新为已统计
-				sqlite.update(CountProductData.TB_NAME, contentValues,
-						CountProductData.PRODUCTID + "=?",
-						new String[] { mAppId });
-				CountArg countArg = getAlarmNewUserArg();
-				if (countArg.mRunMode) {
-					startCountActivity(mName, mAppId);
-				} else {
-					startCountReceiver(mName, COUNT_ACTION_END_NEWUSER, mAppId,
-							countArg.mRunT);
-				}
-				cursor.close();
-
+			String mAppId = cursor.getString(0);
+			String mName = getPageName();
+			ContentValues contentValues = new ContentValues();
+			contentValues.put(CountProductData.STATE,
+					CountProductData.COUNTCOMPLITE);
+			// 灏嗙姸鎬佹洿鏂颁负宸茬粺璁?
+			sqlite.update(CountProductData.TB_NAME, contentValues,
+					CountProductData.PRODUCTID + "=?", new String[] { mAppId });
+			CountArg countArg = getAlarmNewUserArg();
+			if (countArg.mRunMode) {
+				startCountActivity(mName, mAppId);
 			} else {
-				cursor.close();
+				startCountReceiver(mName, COUNT_ACTION_END_NEWUSER, mAppId,
+						countArg.mRunT);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			cursor.close();
+
+		} else {
+			cursor.close();
 		}
+
 	}
 
 	private void startCountActivity(String name, String appId) {
@@ -216,10 +203,15 @@ public class CountManager {
 
 	private void startCountReceiver(String name, String action, String appId,
 			int runT) {
+
+		Log.d("countStart", "start  action=" + action + " appId=" + appId
+				+ " name=" + name + " runT=" + runT);
+
 		MobclickAgent.openActivityDurationTrack(false);
-		MobclickAgent.onPageStart(name); // 统计页面
+		MobclickAgent.onPageStart(name); // 缁熻椤甸潰
 		MobclickAgent.onResume(mContext, appId, null);
 		setEndAlarmTime(mContext, action, runT, name, appId);
+
 	}
 
 	private void setEndAlarmTime(Context context, String action, int runT,
@@ -240,58 +232,60 @@ public class CountManager {
 
 	/**
 	 * 
-	 * @param 开始统计老用户
+	 * @param 寮€濮嬬粺璁¤€佺敤鎴?
 	 */
 	public void startCountOdleUser() {
-		try {
 
-			SycSqlite sqlite = CountProductData.getIntence(mContext)
-					.getSqlite();
+		SycSqlite sqlite = CountProductData.getIntence(mContext).getSqlite();
 
-			Cursor cursor = sqlite.query(CountProductData.TB_NAME,
-					new String[] { CountProductData.PRODUCTID,
-							CountProductData.RANDOMEK },
-					CountProductData.USERTYPE + "= ?",
-					new String[] { "oldUser" }, null, null, null);
+		Cursor cursor = sqlite.query(CountProductData.TB_NAME, new String[] {
+				CountProductData.PRODUCTID, CountProductData.RANDOMEK },
+				CountProductData.USERTYPE + "= ?", new String[] { "oldUser" },
+				null, null, null);
 
-			List<String> productId = new ArrayList<String>();
+		List<String> productId = new ArrayList<String>();
 
-			while (cursor.moveToNext()) {
+		while (cursor.moveToNext()) {
 
-				int size = cursor.getInt(1);
-				String appName = cursor.getString(0);
+			int size = cursor.getInt(1);
+			String appName = cursor.getString(0);
 
-				for (int i = 0; i < size; i++) {
-					productId.add(appName);
-				}
-
+			for (int i = 0; i < size; i++) {
+				productId.add(appName);
 			}
-			cursor.close();
 
-			Random k = new Random();
-
-			int index = (k.nextInt() >>> 1) % productId.size();
-			if (productId.size() > 0) {
-				String appId = productId.get(index);
-
-				String appName = getPageName();
-
-				CountArg countArg = getAlarmOdleUserArg();
-				if (countArg.mRunMode) {
-					startCountActivity(appName, appId);
-				} else {
-					startCountReceiver(appName, COUNT_ACTION_END_ODLEUSER,
-							appId, countArg.mRunT);
-				}
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		cursor.close();
+
+		if (productId.size() < 1) {
+
+			return;
+		}
+
+		Random k = new Random();
+
+		int index = (k.nextInt() >>> 1) % productId.size();
+		Log.d("count", "odle product list =" + productId.size() + "index="
+				+ index);
+		if (productId.size() > 0) {
+			String appId = productId.get(index);
+
+			String appName = getPageName();
+
+			CountArg countArg = getAlarmOdleUserArg();
+			if (countArg.mRunMode) {
+				startCountActivity(appName, appId);
+			} else {
+				startCountReceiver(appName, COUNT_ACTION_END_ODLEUSER, appId,
+						countArg.mRunT);
+			}
+
+		}
+
 	}
 
 	/**
-	 * 获取对轮训新用户的闹钟参数；
+	 * 鑾峰彇瀵硅疆璁柊鐢ㄦ埛鐨勯椆閽熷弬鏁帮紱
 	 * 
 	 * @return
 	 */
@@ -308,7 +302,7 @@ public class CountManager {
 	}
 
 	/**
-	 * 获取对轮训老用户的闹钟参数；
+	 * 鑾峰彇瀵硅疆璁€佺敤鎴风殑闂归挓鍙傛暟锛?
 	 * 
 	 * @return
 	 */
@@ -325,10 +319,14 @@ public class CountManager {
 
 	}
 
-	// 从服务器更新数据库
+	// 浠庢湇鍔″櫒鏇存柊鏁版嵁搴?
 	public void updateCountProductData() {
 
+		Log.d("count", "updateCountProductData");
+
 		if (isCheckUpdate()) {
+
+			Log.d("count", "updateCountProductData isCheckUpdate true");
 
 			new Thread() {
 
@@ -337,6 +335,7 @@ public class CountManager {
 					synchronized ("updateData") {
 						try {
 							int vc = getDataVcfromServer();
+							Log.d("count", "count vc=" + vc);
 							if (vc > getDataVCformLocal()) {
 								updateDBfromServer();
 								setDataVc(vc);
@@ -362,7 +361,7 @@ public class CountManager {
 	private boolean isCheckUpdate() {
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
-				"CountManager", 0);
+				CountName, 0);
 		long t = System.currentTimeMillis()
 				- sharedPreferences.getLong("prevT", 0);
 
@@ -373,7 +372,7 @@ public class CountManager {
 	private void completeUpdate() {
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
-				"CountManager", 0);
+				CountName, 0);
 
 		sharedPreferences.edit().putLong("prevT", System.currentTimeMillis())
 				.commit();
@@ -383,7 +382,7 @@ public class CountManager {
 	private int getDataVCformLocal() {
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
-				"CountManager", 0);
+				CountName, 0);
 
 		return sharedPreferences.getInt("vc", -1);
 
@@ -392,7 +391,7 @@ public class CountManager {
 	public long getPrevUpdateAlarmTime() {
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
-				"CountManager", 0);
+				CountName, 0);
 
 		return sharedPreferences.getLong("alarmT", System.currentTimeMillis());
 
@@ -401,7 +400,7 @@ public class CountManager {
 	public void setPrevUpdateAlarmTime(long time) {
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
-				"CountManager", 0);
+				CountName, 0);
 		sharedPreferences.edit().putLong("alarmT", time).commit();
 
 	}
@@ -409,154 +408,141 @@ public class CountManager {
 	private void setDataVc(int vc) {
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
-				"CountManager", 0);
+				CountName, 0);
 		sharedPreferences.edit().putInt("vc", vc).commit();
 	}
 
 	private void updateDBfromServer() throws MalformedURLException,
 			IOException, JSONException {
 
-		try {
+		URL url = new URL(mUrl + "countContent.json");
 
-			URL url = new URL(mUrl + "countContent.json");
+		HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
+				.openConnection();
+		byte[] content = new byte[mHttpURLConnection.getContentLength()];
 
-			HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
-					.openConnection();
-			byte[] content = new byte[mHttpURLConnection.getContentLength()];
+		InputStream inputStream = mHttpURLConnection.getInputStream();
+		BufferedInputStream bufferedInputStream = new BufferedInputStream(
+				inputStream);
+		bufferedInputStream.read(content);
+		bufferedInputStream.close();
+		inputStream.close();
+		mHttpURLConnection.disconnect();
 
-			InputStream inputStream = mHttpURLConnection.getInputStream();
-			BufferedInputStream bufferedInputStream = new BufferedInputStream(
-					inputStream);
-			bufferedInputStream.read(content);
-			bufferedInputStream.close();
-			inputStream.close();
-			mHttpURLConnection.disconnect();
+		JSONObject jsonObject = new JSONObject(new String(content).trim());
+		Log.d("countContent", jsonObject.toString());
+		JSONObject newUser = jsonObject.getJSONObject("newUser");
 
-			JSONObject jsonObject = new JSONObject(new String(content).trim());
-			JSONObject newUser = jsonObject.getJSONObject("newUser");
+		SharedPreferences preferences = mContext.getSharedPreferences(
+				"newUser", 0);
 
-			SharedPreferences preferences = mContext.getSharedPreferences(
-					"newUser", 0);
+		Editor editor = preferences.edit();
 
-			Editor editor = preferences.edit();
+		editor.putInt("runCount", newUser.getInt("runCount"));
 
-			editor.putInt("runCount", newUser.getInt("runCount"));
+		editor.putInt("randomK", newUser.getInt("randomK"));
 
-			editor.putInt("randomK", newUser.getInt("randomK"));
+		editor.putBoolean("runMode", newUser.getBoolean("runMode"));
 
-			editor.putBoolean("runMode", newUser.getBoolean("runMode"));
+		editor.putInt("runT", newUser.getInt("runT"));
 
-			editor.putInt("runT", newUser.getInt("runT"));
+		editor.commit();
+		SycSqlite sycSqlite = CountProductData.getIntence(mContext).getSqlite();
+		// 鍒犻櫎绛夊緟缁熻鐨勭敤鎴枫€?
+		sycSqlite.delete(CountProductData.TB_NAME, CountProductData.USERTYPE
+				+ "=? and " + CountProductData.STATE + "=?", new String[] {
+				"newUser", CountProductData.COUNTWAIT + "" });
 
-			editor.commit();
-			SycSqlite sycSqlite = CountProductData.getIntence(mContext)
-					.getSqlite();
-			// 删除等待统计的用户。
-			sycSqlite.delete(CountProductData.TB_NAME,
-					CountProductData.USERTYPE + "=? and "
-							+ CountProductData.STATE + "=?", new String[] {
-							"newUser", CountProductData.COUNTWAIT + "" });
+		JSONArray applist = newUser.getJSONArray("applist");
 
-			JSONArray applist = newUser.getJSONArray("applist");
+		for (int i = 0; i < applist.length(); i++) {
 
-			for (int i = 0; i < applist.length(); i++) {
+			JSONObject product = applist.getJSONObject(i);
 
-				JSONObject product = applist.getJSONObject(i);
+			Cursor cursor = sycSqlite.query(CountProductData.TB_NAME,
+					new String[] { CountProductData.PRODUCTID },
+					CountProductData.PRODUCTID + "=?",
+					new String[] { product.getString("appId") }, null, null,
+					null);
 
-				Cursor cursor = sycSqlite.query(CountProductData.TB_NAME,
-						new String[] { CountProductData.PRODUCTID },
-						CountProductData.PRODUCTID + "=?",
-						new String[] { product.getString("appId") }, null,
-						null, null);
+			// 鍓旈櫎宸茬粡缁熻杩囩殑app
 
-				// 剔除已经统计过的app
-
-				if (!cursor.moveToFirst()) {
-
-					ContentValues contentValues = new ContentValues();
-					contentValues.put(CountProductData.USERTYPE, "newUser");
-					contentValues.put(CountProductData.RANDOMEK,
-							product.getInt("randomK"));
-					contentValues.put(CountProductData.PRODUCTID,
-							product.getString("appId"));
-					contentValues.put(CountProductData.STATE,
-							CountProductData.COUNTWAIT);
-					sycSqlite.insert(CountProductData.TB_NAME, null,
-							contentValues);
-				}
-
-				cursor.close();
-
-			}
-
-			//
-			JSONObject odle = jsonObject.getJSONObject("oldUser");
-			preferences = mContext.getSharedPreferences("oldUser", 0);
-			editor = preferences.edit();
-			editor.putInt("runCount", odle.getInt("runCount"));
-			editor.putInt("randomK", odle.getInt("randomK"));
-			editor.putBoolean("runMode", odle.getBoolean("runMode"));
-			editor.putInt("runT", odle.getInt("runT"));
-			editor.commit();
-
-			// 删除统计老用户的 Id;
-			sycSqlite.delete(CountProductData.TB_NAME,
-					CountProductData.USERTYPE + "=?",
-					new String[] { "oldUser" });
-
-			applist = odle.getJSONArray("applist");
-
-			for (int i = 0; i < applist.length(); i++) {
-
-				JSONObject product = applist.getJSONObject(i);
+			if (!cursor.moveToFirst()) {
 
 				ContentValues contentValues = new ContentValues();
-				contentValues.put(CountProductData.USERTYPE, "oldUser");
+				contentValues.put(CountProductData.USERTYPE, "newUser");
 				contentValues.put(CountProductData.RANDOMEK,
 						product.getInt("randomK"));
 				contentValues.put(CountProductData.PRODUCTID,
 						product.getString("appId"));
 				contentValues.put(CountProductData.STATE,
 						CountProductData.COUNTWAIT);
-
 				sycSqlite.insert(CountProductData.TB_NAME, null, contentValues);
 			}
-		} catch (Exception e) {
-			Log.e("UmengCount", "updateDBfromServer()", e);
+
+			cursor.close();
+
+		}
+
+		//
+		JSONObject odle = jsonObject.getJSONObject("oldUser");
+		preferences = mContext.getSharedPreferences("oldUser", 0);
+		editor = preferences.edit();
+		editor.putInt("runCount", odle.getInt("runCount"));
+		editor.putInt("randomK", odle.getInt("randomK"));
+		editor.putBoolean("runMode", odle.getBoolean("runMode"));
+		editor.putInt("runT", odle.getInt("runT"));
+		editor.commit();
+
+		// 鍒犻櫎缁熻鑰佺敤鎴风殑 Id;
+		sycSqlite.delete(CountProductData.TB_NAME, CountProductData.USERTYPE
+				+ "=?", new String[] { "oldUser" });
+
+		applist = odle.getJSONArray("applist");
+
+		for (int i = 0; i < applist.length(); i++) {
+
+			JSONObject product = applist.getJSONObject(i);
+
+			ContentValues contentValues = new ContentValues();
+			contentValues.put(CountProductData.USERTYPE, "oldUser");
+			contentValues.put(CountProductData.RANDOMEK,
+					product.getInt("randomK"));
+			contentValues.put(CountProductData.PRODUCTID,
+					product.getString("appId"));
+			contentValues.put(CountProductData.STATE,
+					CountProductData.COUNTWAIT);
+			sycSqlite.insert(CountProductData.TB_NAME, null, contentValues);
 		}
 
 	}
 
 	/**
-	 * 获取服务器端数据版本号
+	 * 鑾峰彇鏈嶅姟鍣ㄧ鏁版嵁鐗堟湰鍙?
 	 * 
 	 * @return
 	 * @throws IOException
 	 */
-	private int getDataVcfromServer() throws IOException {
-		int version = 1;
-		try {
 
-			URL url = new URL(mUrl + "countVc.txt");
-			HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
-					.openConnection();
-			byte[] versionDate = new byte[mHttpURLConnection.getContentLength()];
-			InputStream inputStream = mHttpURLConnection.getInputStream();
-			BufferedInputStream bufferedInputStream = new BufferedInputStream(
-					inputStream);
-			bufferedInputStream.read(versionDate);
-			bufferedInputStream.close();
-			inputStream.close();
-			mHttpURLConnection.disconnect();
-			version = Integer.parseInt(new String(versionDate).trim());
-		} catch (Exception e) {
-			Log.e("UmengCount", "getDataVcfromServer()", e);
-		}
+	private int getDataVcfromServer() throws IOException {
+		URL url = new URL(mUrl + "countVc.txt");
+		HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
+				.openConnection();
+		byte[] versionDate = new byte[mHttpURLConnection.getContentLength()];
+		InputStream inputStream = mHttpURLConnection.getInputStream();
+		BufferedInputStream bufferedInputStream = new BufferedInputStream(
+				inputStream);
+		bufferedInputStream.read(versionDate);
+		bufferedInputStream.close();
+		inputStream.close();
+		mHttpURLConnection.disconnect();
+		int version = Integer.parseInt(new String(versionDate).trim());
+		Log.d("sv", "version" + version);
 		return version;
 	}
 
 	/**
-	 * 检测 闹钟是否活着
+	 * 妫€娴?闂归挓鏄惁娲荤潃
 	 */
 	public void checkUpdateAlartRotation() {
 
@@ -567,23 +553,24 @@ public class CountManager {
 	}
 
 	/**
-	 * 更新轮训闹钟
+	 * 鏇存柊杞闂归挓
 	 */
 	private void updateAlartRotation() {
 
-		// 注册新用户轮训闹钟 立即开始轮询
+		// 娉ㄥ唽鏂扮敤鎴疯疆璁椆閽?绔嬪嵆寮€濮嬭疆璇?
 		int count = getAlarmNewUserArg().mCount;
 		AlarmManager am = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 500, 1000 * 60,
+				System.currentTimeMillis() + 500, 24 * 1000 * 60 * 60 / count,
 				getIntent(mContext, COUNT_ACTION_ROTATION_NEWUSER));
 
-		// 注册老用户轮训闹钟30 分钟后开始轮训
+		// 娉ㄥ唽鑰佺敤鎴疯疆璁椆閽?0 鍒嗛挓鍚庡紑濮嬭疆璁?
 		count = getAlarmOdleUserArg().mCount;
 		am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 1000 * 60 * 1, 1000 * 60 * 2,
+				System.currentTimeMillis() + 1000 * 60 * 30, 24 * 1000 * 60
+						* 60 / count,
 				getIntent(mContext, COUNT_ACTION_ROTATION_ODLEUSER));
 	}
 
@@ -593,6 +580,7 @@ public class CountManager {
 		return PendingIntent.getBroadcast(context, 0, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 	}
+
 
 	// http://stackoverflow.com/questions/19379349/android-get-manifest-meta-data-out-of-activity
 	// http://yidongkaifa.iteye.com/blog/1780444
@@ -634,21 +622,21 @@ public class CountManager {
 	}
 
 	public void onCreate(Context context) {
-		Log.i(TAG, "onCreate()");
+		Log.i(getClass().getSimpleName(), "onCreate()");
+		checkUmengConfig();
 		MobclickAgent.setDebugMode(true);
 		MobclickAgent.updateOnlineConfig(context);
 		MobclickAgent.openActivityDurationTrack(false);
-		CountManager.instance(context).checkUmengConfig();
 	}
 
 	public void onResume(Context context, String pageName) {
-		Log.i(TAG, "onResume(): " + pageName);
+		Log.i(getClass().getSimpleName(), "onResume(): " + pageName);
 		MobclickAgent.onPageStart(pageName);
 		MobclickAgent.onResume(context, getKey(), "");
 	}
 
 	public void onPause(Context context, String pageName) {
-		Log.i(TAG, "onPause(): " + pageName);
+		Log.i(getClass().getSimpleName(), "onPause(): " + pageName);
 		MobclickAgent.onPageEnd(pageName);
 		MobclickAgent.onPause(context);
 	}
