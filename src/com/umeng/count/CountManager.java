@@ -117,7 +117,8 @@ public class CountManager {
 		MobclickAgent.setDebugMode(getDebug());
 
 		if (getKey() == null || getUrl() == null) {
-			throw new RuntimeException("getKey() == null || getUrl() == null");
+			Log.e(getClass().getSimpleName(),
+					"getKey() == null || getUrl() == null");
 		}
 
 	}
