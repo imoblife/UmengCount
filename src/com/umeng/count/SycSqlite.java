@@ -1,6 +1,5 @@
 package com.umeng.count;
 
-
 import junit.framework.Assert;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -106,4 +105,3 @@ public class SycSqlite {
 	}
 
 }
-

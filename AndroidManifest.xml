@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.umeng.count"
+    package="com.um.test"
     android:versionCode="1"
-    android:versionName="1.6" >
+    android:versionName="1.0.test.4" >
 
     <uses-sdk
-        android:minSdkVersion="4"
-        android:targetSdkVersion="18" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="21" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
         <activity
-            android:name="com.umeng.test.TestActivity1"
+            android:name="com.umeng.test.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,12 +44,86 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.umeng.test.TestActivity2" />
-        <activity android:name="com.umeng.test.TestActivity3" />
-        <activity android:name="com.umeng.test.TestActivity4" />
-        <activity android:name="com.umeng.test.TestActivity5" />
+        <activity
+            android:name="com.umeng.test.Activity1"
+            android:exported="true" />
+        <activity
+            android:name="com.umeng.test.Activity2"
+            android:exported="true" />
+
+        <receiver
+            android:name="com.umeng.count.PresentReceiver"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="count_action_rotation_newuser" />
+                <action android:name="count_action_rotation_odleuser" />
+                <action android:name="count_action_end_newuser" />
+                <action android:name="count_action_end_odleuser" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
 
         <!-- Umeng -->
+        <!-- All-In-One Toolbox -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_debug" -->
+        <!-- android:value="true" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_key" -->
+        <!-- android:value="535f6f3656240beac200b7cc" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_url" -->
+        <!-- android:value="https://s3.amazonaws.com/appmessage121119/aio/umeng/" /> -->
+
+
+        <!-- Memory Booster -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_debug" -->
+        <!-- android:value="true" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_key" -->
+        <!-- android:value="535f7dcb56240beac501290c" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_url" -->
+        <!-- android:value="https://s3.amazonaws.com/appmessage121119/memorybooster/umeng/" /> -->
+
+
+        <!-- Battery Booster -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_debug" -->
+        <!-- android:value="true" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_key" -->
+        <!-- android:value="535f7ef256240beab10151da" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_url" -->
+        <!-- android:value="https://s3.amazonaws.com/appmessage121119/batterybooster/umeng/" /> -->
+
+
+        <!-- 测试 -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_debug" -->
+        <!-- android:value="true" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_key" -->
+        <!-- android:value="53f3ffc4fd98c5ff07017771" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="umeng_url" -->
+        <!-- android:value="https://s3.amazonaws.com/appmessage121119/memorybooster/test/" /> -->
+
+
+        <!-- 测试2 -->
+        <meta-data
+            android:name="umeng_debug"
+            android:value="true" />
+        <meta-data
+            android:name="umeng_key"
+            android:value="53fd49fdfd98c5c577028b2c" />
+        <meta-data
+            android:name="umeng_url"
+            android:value="https://s3.amazonaws.com/appmessage121119/batterybooster/umengtest/" />
+
         <receiver
             android:name="com.umeng.count.PresentReceiver"
             android:enabled="true"
@@ -44,41 +136,6 @@
                 <action android:name="count_action_end_odleuser" />
             </intent-filter>
         </receiver>
-
-        <!-- All-In-One Toolbox -->
-        <!-- <meta-data -->
-        <!-- android:name="umeng_key" -->
-        <!-- android:value="535f6f3656240beac200b7cc" /> -->
-        <!-- <meta-data -->
-        <!-- android:name="umeng_url" -->
-        <!-- android:value="https://s3.amazonaws.com/appmessage121119/aio/umeng/" /> -->
-
-
-        <!-- Memory Booster -->
-        <!-- <meta-data -->
-        <!-- android:name="umeng_key" -->
-        <!-- android:value="535f7dcb56240beac501290c" /> -->
-        <!-- <meta-data -->
-        <!-- android:name="umeng_url" -->
-        <!-- android:value="https://s3.amazonaws.com/appmessage121119/memorybooster/umeng/" /> -->
-
-
-        <!-- Battery Booster -->
-        <!-- <meta-data -->
-        <!-- android:name="umeng_key" -->
-        <!-- android:value="535f7ef256240beab10151da" /> -->
-        <!-- <meta-data -->
-        <!-- android:name="umeng_url" -->
-        <!-- android:value="https://s3.amazonaws.com/appmessage121119/batterybooster/umeng/" /> -->
-
-
-        <!-- 测试 -->
-        <meta-data
-            android:name="umeng_key"
-            android:value="53f3ffc4fd98c5ff07017771" />
-        <meta-data
-            android:name="umeng_url"
-            android:value="https://s3.amazonaws.com/appmessage121119/memorybooster/test/" />
     </application>
 
 </manifest>
