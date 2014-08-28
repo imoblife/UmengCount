@@ -17,11 +17,6 @@ public class Activity0 extends UmengActivity {
 		this.setContentView(R.layout.main);
 		this.setTitle(getClass().getSimpleName());
 
-		// 检测轮训闹钟是否存活
-		CountManager.instance(this).checkUpdateAlartRotation();
-		// 检测参数更新
-		CountManager.instance(this).updateCountProductData();
-
 		Button button = (Button) findViewById(R.id.button);
 		button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -30,4 +25,11 @@ public class Activity0 extends UmengActivity {
 		});
 	}
 
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// 检测轮训闹钟是否存活
+		CountManager.instance(this).checkUpdateAlartRotation();
+		// 检测参数更新
+		CountManager.instance(this).updateCountProductData();
+	}
 }
