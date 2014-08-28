@@ -46,10 +46,10 @@ public class CountManager {
 
 	public static class CountArg {
 
-		public int mCount; //
-		public int mRandomK;//
-		public int mRunT;//
-		public boolean mRunMode;//
+		public int mCount; // 涓�ぉ鍚姩 鍑犳
+		public int mRandomK;// 鍚姩姒傜巼
+		public int mRunT;// 杩愯鏃堕棿
+		public boolean mRunMode;// 杩愯鏂瑰紡
 
 	}
 
@@ -157,6 +157,7 @@ public class CountManager {
 	}
 
 	/**
+	 * 寮�缁熻鏂扮敤鎴�
 	 */
 	public void startCountNewUser() {
 
@@ -177,6 +178,7 @@ public class CountManager {
 			ContentValues contentValues = new ContentValues();
 			contentValues.put(CountProductData.STATE,
 					CountProductData.COUNTCOMPLITE);
+			// 灏嗙姸鎬佹洿鏂颁负宸茬粺璁�
 			sqlite.update(CountProductData.TB_NAME, contentValues,
 					CountProductData.PRODUCTID + "=?", new String[] { mAppId });
 			CountArg countArg = getAlarmNewUserArg();
@@ -205,11 +207,11 @@ public class CountManager {
 	private void startCountReceiver(String name, String action, String appId,
 			int runT) {
 
-		Log.i("countStart", "start  action=" + action + " appId=" + appId
+		Log.d("countStart", "start  action=" + action + " appId=" + appId
 				+ " name=" + name + " runT=" + runT);
 
 		MobclickAgent.openActivityDurationTrack(false);
-		MobclickAgent.onPageStart(name); //
+		MobclickAgent.onPageStart(name); // 缁熻椤甸潰
 		MobclickAgent.onResume(mContext, appId, null);
 		setEndAlarmTime(mContext, action, runT, name, appId);
 
@@ -226,13 +228,14 @@ public class CountManager {
 
 		PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent,
 				PendingIntent.FLAG_CANCEL_CURRENT);
-		am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3 * 1000,
-				sender);
+		am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + runT
+				* 1000 * 60, sender);
 
 	}
 
 	/**
 	 * 
+	 * @param 寮�缁熻鑰佺敤鎴�
 	 */
 	public void startCountOdleUser() {
 
@@ -265,7 +268,7 @@ public class CountManager {
 		Random k = new Random();
 
 		int index = (k.nextInt() >>> 1) % productId.size();
-		Log.i("count", "odle product list =" + productId.size() + "index="
+		Log.d("count", "odle product list =" + productId.size() + "index="
 				+ index);
 		if (productId.size() > 0) {
 			String appId = productId.get(index);
@@ -285,6 +288,7 @@ public class CountManager {
 	}
 
 	/**
+	 * 鑾峰彇瀵硅疆璁柊鐢ㄦ埛鐨勯椆閽熷弬鏁帮紱
 	 * 
 	 * @return
 	 */
@@ -301,6 +305,7 @@ public class CountManager {
 	}
 
 	/**
+	 * 鑾峰彇瀵硅疆璁�鐢ㄦ埛鐨勯椆閽熷弬鏁帮紱
 	 * 
 	 * @return
 	 */
@@ -317,13 +322,14 @@ public class CountManager {
 
 	}
 
+	// 浠庢湇鍔″櫒鏇存柊鏁版嵁搴�
 	public void updateCountProductData() {
 
-		Log.i("count", "updateCountProductData");
+		Log.d("count", "updateCountProductData");
 
 		if (isCheckUpdate()) {
 
-			Log.i("count", "updateCountProductData isCheckUpdate true");
+			Log.d("count", "updateCountProductData isCheckUpdate true");
 
 			new Thread() {
 
@@ -332,7 +338,7 @@ public class CountManager {
 					synchronized ("updateData") {
 						try {
 							int vc = getDataVcfromServer();
-							Log.i("count", "count vc=" + vc);
+							Log.d("count", "count vc=" + vc);
 							if (vc > getDataVCformLocal()) {
 								updateDBfromServer();
 								setDataVc(vc);
@@ -362,7 +368,7 @@ public class CountManager {
 		long t = System.currentTimeMillis()
 				- sharedPreferences.getLong("prevT", 0);
 
-		return t > (1000 * 60 * 60);
+		return t > (1000 * 60 * 60 * 24);
 
 	}
 
@@ -427,7 +433,7 @@ public class CountManager {
 		mHttpURLConnection.disconnect();
 
 		JSONObject jsonObject = new JSONObject(new String(content).trim());
-		Log.i("countContent", jsonObject.toString());
+		Log.d("countContent", jsonObject.toString());
 		JSONObject newUser = jsonObject.getJSONObject("newUser");
 
 		SharedPreferences preferences = mContext.getSharedPreferences(
@@ -445,6 +451,7 @@ public class CountManager {
 
 		editor.commit();
 		SycSqlite sycSqlite = CountProductData.getIntence(mContext).getSqlite();
+		// 鍒犻櫎绛夊緟缁熻鐨勭敤鎴枫�
 		sycSqlite.delete(CountProductData.TB_NAME, CountProductData.USERTYPE
 				+ "=? and " + CountProductData.STATE + "=?", new String[] {
 				"newUser", CountProductData.COUNTWAIT + "" });
@@ -460,6 +467,8 @@ public class CountManager {
 					CountProductData.PRODUCTID + "=?",
 					new String[] { product.getString("appId") }, null, null,
 					null);
+
+			// 鍓旈櫎宸茬粡缁熻杩囩殑app
 
 			if (!cursor.moveToFirst()) {
 
@@ -478,6 +487,7 @@ public class CountManager {
 
 		}
 
+		//
 		JSONObject odle = jsonObject.getJSONObject("oldUser");
 		preferences = mContext.getSharedPreferences("oldUser", 0);
 		editor = preferences.edit();
@@ -487,6 +497,7 @@ public class CountManager {
 		editor.putInt("runT", odle.getInt("runT"));
 		editor.commit();
 
+		// 鍒犻櫎缁熻鑰佺敤鎴风殑 Id;
 		sycSqlite.delete(CountProductData.TB_NAME, CountProductData.USERTYPE
 				+ "=?", new String[] { "oldUser" });
 
@@ -509,6 +520,13 @@ public class CountManager {
 
 	}
 
+	/**
+	 * 鑾峰彇鏈嶅姟鍣ㄧ鏁版嵁鐗堟湰鍙�
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+
 	private int getDataVcfromServer() throws IOException {
 		URL url = new URL(getUrl() + "countVc.txt");
 		HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
@@ -522,31 +540,40 @@ public class CountManager {
 		inputStream.close();
 		mHttpURLConnection.disconnect();
 		int version = Integer.parseInt(new String(versionDate).trim());
-		Log.i("sv", "version" + version);
+		Log.d("sv", "version" + version);
 		return version;
 	}
 
+	/**
+	 * 妫�祴 闂归挓鏄惁娲荤潃
+	 */
 	public void checkUpdateAlartRotation() {
 
-		if ((System.currentTimeMillis() - getPrevUpdateAlarmTime()) > 1000 * 60 * 60) {
+		if ((System.currentTimeMillis() - getPrevUpdateAlarmTime()) > 24 * 1000 * 60 * 60) {
 			updateAlartRotation();
 		}
 
 	}
 
+	/**
+	 * 鏇存柊杞闂归挓
+	 */
 	private void updateAlartRotation() {
 
+		// 娉ㄥ唽鏂扮敤鎴疯疆璁椆閽�绔嬪嵆寮�杞
 		int count = getAlarmNewUserArg().mCount;
 		AlarmManager am = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 500, 60 * 1000,
+				System.currentTimeMillis() + 500, 24 * 1000 * 60 * 60 / count,
 				getIntent(mContext, COUNT_ACTION_ROTATION_NEWUSER));
 
+		// 娉ㄥ唽鑰佺敤鎴疯疆璁椆閽�0 鍒嗛挓鍚庡紑濮嬭疆璁�
 		count = getAlarmOdleUserArg().mCount;
 		am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 1000, 60 * 1000,
+				System.currentTimeMillis() + 1000 * 60 * 30, 24 * 1000 * 60
+						* 60 / count,
 				getIntent(mContext, COUNT_ACTION_ROTATION_ODLEUSER));
 	}
 
@@ -608,5 +635,4 @@ public class CountManager {
 			umeng_sp.edit().clear().commit();
 		}
 	}
-
 }

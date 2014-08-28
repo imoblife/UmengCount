@@ -22,7 +22,7 @@ public class CountActivity extends Activity {
 
 	protected void onResume() {
 		super.onResume();
-		MobclickAgent.onPageStart(mName); // 
+		MobclickAgent.onPageStart(mName); // 统计页面
 		MobclickAgent.onResume(this, mAppId, null);
 		handler.postDelayed(new Runnable() {
 
@@ -34,7 +34,7 @@ public class CountActivity extends Activity {
 
 	protected void onPause() {
 		super.onPause();
-		MobclickAgent.onPageEnd(mName); // 
+		MobclickAgent.onPageEnd(mName); // 保证 onPageEnd 在onPause
 		MobclickAgent.onPause(this);
 
 	}

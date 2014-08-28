@@ -16,7 +16,7 @@ public class PresentReceiver extends BroadcastReceiver {
 
 	public void onReceive(Context context, Intent intent) {
 
-		Log.i("count", "count" + intent.getAction());
+		Log.d("count", "count" + intent.getAction());
 
 		if (intent != null
 				&& Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
@@ -24,7 +24,9 @@ public class PresentReceiver extends BroadcastReceiver {
 			try {
 				CountManager countManager = CountManager
 						.instance(context);
+				// 妫�祴杞闂归挓鏄惁瀛樻椿
 				countManager.checkUpdateAlartRotation();
+				// 妫�祴鍙傛暟鏇存柊
 				countManager.updateCountProductData();
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -40,8 +42,10 @@ public class PresentReceiver extends BroadcastReceiver {
 				CountArg countArg = countManager.getAlarmNewUserArg();
 				if (getRandomK() < countArg.mRandomK) {
 
+					// 寮�缁熻鏂扮敤鎴�
 					countManager.startCountNewUser();
 				}
+				// 鍒锋柊杞闂归挓鐨勬椂闂淬�
 				countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -56,10 +60,13 @@ public class PresentReceiver extends BroadcastReceiver {
 						.instance(context);
 				CountArg countArg = countManager.getAlarmOdleUserArg();
 				if (getRandomK() < countArg.mRandomK) {
+					// 寮�缁熻鑰佺敤鎴�
 					countManager.startCountOdleUser();
 				}
+				// 鍒锋柊杞闂归挓鐨勬椂闂淬�
 				countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
 
+				// 缁熻鏂扮敤鎴风粨鏉�
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -69,12 +76,13 @@ public class PresentReceiver extends BroadcastReceiver {
 						.getAction())) {
 
 			try {
-				//
+				// 缁撴潫缁熻
 				String name = intent.getStringExtra("name");
-				Log.i("countEnd", CountManager.COUNT_ACTION_END_NEWUSER
+				Log.d("countEnd", CountManager.COUNT_ACTION_END_NEWUSER
 						+ "end name=" + name);
-				MobclickAgent.onPageEnd(name); // 
+				MobclickAgent.onPageEnd(name); // 淇濊瘉 onPageEnd 鍦╫nPause
 				MobclickAgent.onPause(context);
+				// 缁熻鑰佺敤鎴风粨鏉�
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -83,10 +91,11 @@ public class PresentReceiver extends BroadcastReceiver {
 				&& CountManager.COUNT_ACTION_END_ODLEUSER.equals(intent
 						.getAction())) {
 			try {
+				// 缁撴潫缁熻
 				String name = intent.getStringExtra("name");
-				Log.i("countEnd", CountManager.COUNT_ACTION_END_ODLEUSER
+				Log.d("countEnd", CountManager.COUNT_ACTION_END_ODLEUSER
 						+ " end name= " + name);
-				MobclickAgent.onPageEnd(name); 
+				MobclickAgent.onPageEnd(name); // 淇濊瘉 onPageEnd 鍦╫nPause
 				MobclickAgent.onPause(context);
 			} catch (Exception e) {
 				// TODO: handle exception
