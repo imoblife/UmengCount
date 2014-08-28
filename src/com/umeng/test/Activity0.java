@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.um.test.R;
 import com.umeng.activity.UmengActivity;
 import com.umeng.count.CountManager;
+import com.umeng.count.R;
 
 public class Activity0 extends UmengActivity {
 

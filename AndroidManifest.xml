@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.um.test"
+    package="com.umeng.count"
     android:versionCode="1"
     android:versionName="2.0.test.1" >
 
@@ -33,10 +33,10 @@
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name" >
+        android:label="@string/umeng_count" >
         <activity
             android:name="com.umeng.test.Activity0"
-            android:label="@string/app_name" >
+            android:label="@string/umeng_count" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
