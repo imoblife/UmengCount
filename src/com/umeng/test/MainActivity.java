@@ -21,7 +21,7 @@ public class MainActivity extends UmengActivity {
 		// 检测参数更新
 		CountManager.instence(this).updateCountProductData();
 
-		Button button = (Button) findViewById(R.id.button1);
+		Button button = (Button) findViewById(R.id.button);
 		button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(MainActivity.this, Activity1.class));
