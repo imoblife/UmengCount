@@ -10,21 +10,22 @@ import com.um.test.R;
 import com.umeng.activity.UmengActivity;
 import com.umeng.count.CountManager;
 
-public class MainActivity extends UmengActivity {
+public class Activity0 extends UmengActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		this.setContentView(R.layout.main);
+		this.setTitle(getClass().getSimpleName());
 
 		// 检测轮训闹钟是否存活
-		CountManager.instence(this).checkUpdateAlartRotation();
+		CountManager.instance(this).checkUpdateAlartRotation();
 		// 检测参数更新
-		CountManager.instence(this).updateCountProductData();
+		CountManager.instance(this).updateCountProductData();
 
 		Button button = (Button) findViewById(R.id.button);
 		button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				startActivity(new Intent(MainActivity.this, Activity1.class));
+				startActivity(new Intent(Activity0.this, Activity1.class));
 			}
 		});
 	}

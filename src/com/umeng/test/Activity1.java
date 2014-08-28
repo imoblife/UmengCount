@@ -13,7 +13,8 @@ public class Activity1 extends UmengActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		this.setContentView(R.layout.main);
+		this.setTitle(getClass().getSimpleName());
 
 		Button button = (Button) findViewById(R.id.button);
 		button.setOnClickListener(new OnClickListener() {

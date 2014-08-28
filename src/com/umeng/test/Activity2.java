@@ -8,6 +8,7 @@ import com.umeng.activity.UmengActivity;
 public class Activity2 extends UmengActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		this.setContentView(R.layout.main);
+		this.setTitle(getClass().getSimpleName());
 	}
 }

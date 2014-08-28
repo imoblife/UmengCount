@@ -124,7 +124,7 @@ public class CountManager {
 
 	private static CountManager mCountManager;
 
-	public static CountManager instence(Context context) {
+	public static CountManager instance(Context context) {
 
 		if (mCountManager == null) {
 			mCountManager = new CountManager(context);
@@ -478,7 +478,6 @@ public class CountManager {
 
 		}
 
-		//
 		JSONObject odle = jsonObject.getJSONObject("oldUser");
 		preferences = mContext.getSharedPreferences("oldUser", 0);
 		editor = preferences.edit();
@@ -510,12 +509,6 @@ public class CountManager {
 
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-
 	private int getDataVcfromServer() throws IOException {
 		URL url = new URL(getUrl() + "countVc.txt");
 		HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
@@ -533,8 +526,6 @@ public class CountManager {
 		return version;
 	}
 
-	/**
-	 */
 	public void checkUpdateAlartRotation() {
 
 		if ((System.currentTimeMillis() - getPrevUpdateAlarmTime()) > 1000 * 60 * 60) {
@@ -543,8 +534,6 @@ public class CountManager {
 
 	}
 
-	/**
-	 */
 	private void updateAlartRotation() {
 
 		int count = getAlarmNewUserArg().mCount;
@@ -601,12 +590,12 @@ public class CountManager {
 	}
 
 	//Manifest:
-	//<meta-data android:name="umeng_url" android:value="..." />
+	//<meta-data android:name="umeng_debug" android:value="true" />
 	public boolean getDebug() {
 		Bundle b = getMetaData(mContext);
-		String s = b.getString("umeng_debug");
+		boolean s = b.getBoolean("umeng_debug", false);
 		Log.i(getClass().getSimpleName(), "getDebug(): " + s);
-		return "true".equals(s);
+		return s;
 	}
 
 	public void checkUmengConfig() {
@@ -620,24 +609,4 @@ public class CountManager {
 		}
 	}
 
-	// no use
-	//	public void onCreate(Context context) {
-	//		Log.i(getClass().getSimpleName(), "onCreate()");
-	//		checkUmengConfig();
-	//		MobclickAgent.setDebugMode(true);
-	//		MobclickAgent.updateOnlineConfig(context);
-	//		MobclickAgent.openActivityDurationTrack(false);
-	//	}
-	//
-	//	public void onResume(Context context, String pageName) {
-	//		Log.i(getClass().getSimpleName(), "onResume(): " + pageName);
-	//		MobclickAgent.onPageStart(pageName);
-	//		MobclickAgent.onResume(context, "53fd49fdfd98c5c577028b2c", "");
-	//	}
-	//
-	//	public void onPause(Context context, String pageName) {
-	//		Log.i(getClass().getSimpleName(), "onPause(): " + pageName);
-	//		MobclickAgent.onPageEnd(pageName);
-	//		MobclickAgent.onPause(context);
-	//	}
 }

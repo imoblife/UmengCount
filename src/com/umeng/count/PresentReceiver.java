@@ -23,7 +23,7 @@ public class PresentReceiver extends BroadcastReceiver {
 
 			try {
 				CountManager countManager = CountManager
-						.instence(context);
+						.instance(context);
 				countManager.checkUpdateAlartRotation();
 				countManager.updateCountProductData();
 			} catch (Exception e) {
@@ -36,7 +36,7 @@ public class PresentReceiver extends BroadcastReceiver {
 
 			try {
 				CountManager countManager = CountManager
-						.instence(context);
+						.instance(context);
 				CountArg countArg = countManager.getAlarmNewUserArg();
 				if (getRandomK() < countArg.mRandomK) {
 
@@ -53,7 +53,7 @@ public class PresentReceiver extends BroadcastReceiver {
 
 			try {
 				CountManager countManager = CountManager
-						.instence(context);
+						.instance(context);
 				CountArg countArg = countManager.getAlarmOdleUserArg();
 				if (getRandomK() < countArg.mRandomK) {
 					countManager.startCountOdleUser();

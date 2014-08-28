@@ -14,17 +14,17 @@ public class UmengFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		MobclickAgent.updateOnlineConfig(getActivity());
 		MobclickAgent.openActivityDurationTrack(false);
-		CountManager.instence(getActivity()).checkUmengConfig();
-		pageName = CountManager.instence(getActivity()).getPageName();
+		CountManager.instance(getActivity()).checkUmengConfig();
+		pageName = CountManager.instance(getActivity()).getPageName();
+		
+		Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);
 	}
 
 	public void onResume() {
 		super.onResume();
 		MobclickAgent.onPageStart(pageName);
 		MobclickAgent.onResume(getActivity(),
-				CountManager.instence(getActivity()).getKey(), "");
-		
-		Log.i(getClass().getSimpleName(), "onResume(): " + CountManager.instence(getActivity()).getKey());
+				CountManager.instance(getActivity()).getKey(), "");
 	}
 
 	public void onPause() {
