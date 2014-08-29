@@ -28,7 +28,7 @@ public class CountProductData extends SQLiteOpenHelper {
 		Log.d("count", "getIntence");
 
 		if (mCountProduct == null) {
-			mCountProduct = new CountProductData(context, "count.db", null, 2);
+			mCountProduct = new CountProductData(context, "count.db", null, 3);
 		}
 		mCountProduct.mContext = context;
 

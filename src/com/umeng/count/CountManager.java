@@ -40,7 +40,7 @@ public class CountManager {
 
 	public static final String COUNT_ACTION_END_NEWUSER = "count_action_end_newuser";
 
-	private final String CountName = "CountManagerV1";
+	private final String CountName = "CountManagerV3";
 
 	Context mContext;
 
@@ -365,7 +365,7 @@ public class CountManager {
 	}
 
 	private boolean isCheckUpdate() {
-		
+
 		Log.d("count", "isCheckUpdate");
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
@@ -380,7 +380,7 @@ public class CountManager {
 	private void completeUpdate() {
 
 		Log.d("count", "completeUpdate");
-		
+
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
 				CountName, 0);
 
@@ -429,7 +429,8 @@ public class CountManager {
 
 	private void updateDBfromServer() throws MalformedURLException,
 			IOException, JSONException {
-		Log.d("count", "updateDBfromServer():　" + getUrl() + "countContent.json");
+		Log.d("count", "updateDBfromServer():　" + getUrl()
+				+ "countContent.json");
 
 		URL url = new URL(getUrl() + "countContent.json");
 
@@ -580,9 +581,9 @@ public class CountManager {
 		int count = getAlarmNewUserArg().mCount;
 		AlarmManager am = (AlarmManager) mContext
 				.getSystemService(Context.ALARM_SERVICE);
-		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 500, 24 * 1000 * 60 * 60 / count,
-				getIntent(mContext, COUNT_ACTION_ROTATION_NEWUSER));
+		//		am.setRepeating(AlarmManager.RTC_WAKEUP,
+		//				System.currentTimeMillis() + 500, 24 * 1000 * 60 * 60 / count,
+		//				getIntent(mContext, COUNT_ACTION_ROTATION_NEWUSER));
 
 		// 娉ㄥ唽鑰佺敤鎴疯疆璁椆閽�0 鍒嗛挓鍚庡紑濮嬭疆璁�
 		count = getAlarmOdleUserArg().mCount;

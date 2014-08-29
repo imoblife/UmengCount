@@ -37,20 +37,20 @@ public class PresentReceiver extends BroadcastReceiver {
 				&& CountManager.COUNT_ACTION_ROTATION_NEWUSER.equals(intent
 						.getAction())) {
 
-			try {
-				CountManager countManager = CountManager
-						.instance(context);
-				CountArg countArg = countManager.getAlarmNewUserArg();
-				if (getRandomK() < countArg.mRandomK) {
-
-					// 寮�缁熻鏂扮敤鎴�
-					countManager.startCountNewUser();
-				}
-				// 鍒锋柊杞闂归挓鐨勬椂闂淬�
-				countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+//			try {
+//				CountManager countManager = CountManager
+//						.instance(context);
+//				CountArg countArg = countManager.getAlarmNewUserArg();
+//				if (getRandomK() < countArg.mRandomK) {
+//
+//					// 寮�缁熻鏂扮敤鎴�
+//					countManager.startCountNewUser();
+//				}
+//				// 鍒锋柊杞闂归挓鐨勬椂闂淬�
+//				countManager.setPrevUpdateAlarmTime(System.currentTimeMillis());
+//			} catch (Exception e) {
+//				// TODO: handle exception
+//			}
 
 		} else if (intent != null
 				&& CountManager.COUNT_ACTION_ROTATION_ODLEUSER.equals(intent
