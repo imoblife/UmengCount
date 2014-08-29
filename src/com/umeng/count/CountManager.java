@@ -429,7 +429,7 @@ public class CountManager {
 
 	private void updateDBfromServer() throws MalformedURLException,
 			IOException, JSONException {
-		Log.d("count", "updateDBfromServer");
+		Log.d("count", "updateDBfromServer():　" + getUrl() + "countContent.json");
 
 		URL url = new URL(getUrl() + "countContent.json");
 
@@ -541,7 +541,7 @@ public class CountManager {
 	 */
 
 	private int getDataVcfromServer() throws IOException {
-		Log.d("count", "getDataVcfromServer");
+		Log.d("count", "getDataVcfromServer(): " + getUrl() + "countVc.txt");
 		URL url = new URL(getUrl() + "countVc.txt");
 		HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
 				.openConnection();
