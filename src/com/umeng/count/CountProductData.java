@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class CountProductData extends SQLiteOpenHelper {
 
@@ -24,6 +25,7 @@ public class CountProductData extends SQLiteOpenHelper {
 	Context mContext;
 
 	public static CountProductData getIntence(Context context) {
+		Log.d("count", "getIntence");
 
 		if (mCountProduct == null) {
 			mCountProduct = new CountProductData(context, "count.db", null, 2);
@@ -35,6 +37,7 @@ public class CountProductData extends SQLiteOpenHelper {
 	}
 
 	public SycSqlite getSqlite() {
+		Log.d("count", "getSqlite");
 
 		if (database == null || !database.isOpen()) {
 			database = getWritableDatabase();
@@ -46,10 +49,12 @@ public class CountProductData extends SQLiteOpenHelper {
 	private CountProductData(Context context, String name,
 			CursorFactory factory, int version) {
 		super(context, name, factory, version);
+		Log.d("count", "CountProductData");
 		// TODO Auto-generated constructor stub
 	}
 
 	public void onCreate(SQLiteDatabase db) {
+		Log.d("count", "onCreate");
 
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + TB_NAME + " ("
 				+ "ID INTEGER PRIMARY KEY autoincrement not null," + RANDOMEK
@@ -59,6 +64,7 @@ public class CountProductData extends SQLiteOpenHelper {
 	}
 
 	public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
+		Log.d("count", "onUpgrade");
 		db.execSQL("DROP TABLE " + TB_NAME);
 
 		onCreate(db);

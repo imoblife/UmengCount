@@ -15,6 +15,7 @@ import android.util.Log;
 public class PresentReceiver extends BroadcastReceiver {
 
 	public void onReceive(Context context, Intent intent) {
+		Log.d("count", "onReceive");
 
 		Log.d("count", "count" + intent.getAction());
 
@@ -105,6 +106,7 @@ public class PresentReceiver extends BroadcastReceiver {
 	}
 
 	private int getRandomK() {
+		Log.d("count", "getRandomK");
 		Random random = new Random();
 		return (random.nextInt() >>> 1) % 100;
 

@@ -207,9 +207,7 @@ public class CountManager {
 
 	private void startCountReceiver(String name, String action, String appId,
 			int runT) {
-
-		Log.d("countStart", "start  action=" + action + " appId=" + appId
-				+ " name=" + name + " runT=" + runT);
+		Log.d("count", "startCountReceiver");
 
 		MobclickAgent.openActivityDurationTrack(false);
 		MobclickAgent.onPageStart(name); // 缁熻椤甸潰
@@ -220,6 +218,7 @@ public class CountManager {
 
 	private void setEndAlarmTime(Context context, String action, int runT,
 			String name, String appId) {
+		Log.d("count", "setEndAlarmTime");
 		AlarmManager am = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(action);
@@ -239,6 +238,7 @@ public class CountManager {
 	 * @param 寮�缁熻鑰佺敤鎴�
 	 */
 	public void startCountOdleUser() {
+		Log.d("count", "startCountOdleUser");
 
 		SycSqlite sqlite = CountProductData.getIntence(mContext).getSqlite();
 
@@ -294,6 +294,7 @@ public class CountManager {
 	 * @return
 	 */
 	public CountArg getAlarmNewUserArg() {
+		Log.d("count", "getAlarmNewUserArg");
 		CountArg countArg = new CountArg();
 		SharedPreferences preferences = mContext.getSharedPreferences(
 				"newUser", 0);
@@ -311,6 +312,7 @@ public class CountManager {
 	 * @return
 	 */
 	public CountArg getAlarmOdleUserArg() {
+		Log.d("count", "getAlarmOdleUserArg");
 
 		CountArg countArg = new CountArg();
 		SharedPreferences preferences = mContext.getSharedPreferences(
@@ -363,6 +365,8 @@ public class CountManager {
 	}
 
 	private boolean isCheckUpdate() {
+		
+		Log.d("count", "isCheckUpdate");
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
 				CountName, 0);
@@ -375,6 +379,8 @@ public class CountManager {
 
 	private void completeUpdate() {
 
+		Log.d("count", "completeUpdate");
+		
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
 				CountName, 0);
 
@@ -385,6 +391,8 @@ public class CountManager {
 
 	private int getDataVCformLocal() {
 
+		Log.d("count", "getDataVCformLocal");
+
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
 				CountName, 0);
 
@@ -393,6 +401,7 @@ public class CountManager {
 	}
 
 	public long getPrevUpdateAlarmTime() {
+		Log.d("count", "getPrevUpdateAlarmTime");
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
 				CountName, 0);
@@ -402,6 +411,7 @@ public class CountManager {
 	}
 
 	public void setPrevUpdateAlarmTime(long time) {
+		Log.d("count", "setPrevUpdateAlarmTime");
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
 				CountName, 0);
@@ -410,6 +420,7 @@ public class CountManager {
 	}
 
 	private void setDataVc(int vc) {
+		Log.d("count", "setDataVc");
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
 				CountName, 0);
@@ -418,6 +429,7 @@ public class CountManager {
 
 	private void updateDBfromServer() throws MalformedURLException,
 			IOException, JSONException {
+		Log.d("count", "updateDBfromServer");
 
 		URL url = new URL(getUrl() + "countContent.json");
 
@@ -529,6 +541,7 @@ public class CountManager {
 	 */
 
 	private int getDataVcfromServer() throws IOException {
+		Log.d("count", "getDataVcfromServer");
 		URL url = new URL(getUrl() + "countVc.txt");
 		HttpURLConnection mHttpURLConnection = (HttpURLConnection) url
 				.openConnection();
@@ -549,6 +562,7 @@ public class CountManager {
 	 * 妫�祴 闂归挓鏄惁娲荤潃
 	 */
 	public void checkUpdateAlartRotation() {
+		Log.d("count", "checkUpdateAlartRotation");
 
 		if ((System.currentTimeMillis() - getPrevUpdateAlarmTime()) > 24 * 1000 * 60 * 60) {
 			updateAlartRotation();
@@ -560,6 +574,7 @@ public class CountManager {
 	 * 鏇存柊杞闂归挓
 	 */
 	private void updateAlartRotation() {
+		Log.d("count", "updateAlartRotation");
 
 		// 娉ㄥ唽鏂扮敤鎴疯疆璁椆閽�绔嬪嵆寮�杞
 		int count = getAlarmNewUserArg().mCount;
@@ -579,6 +594,7 @@ public class CountManager {
 	}
 
 	private PendingIntent getIntent(Context context, String action) {
+		Log.d("count", "getIntent");
 		Intent intent = new Intent(context, PresentReceiver.class);
 		intent.setAction(action);
 		return PendingIntent.getBroadcast(context, 0, intent,
@@ -588,6 +604,7 @@ public class CountManager {
 	// http://stackoverflow.com/questions/19379349/android-get-manifest-meta-data-out-of-activity
 	// http://yidongkaifa.iteye.com/blog/1780444
 	public Bundle getMetaData(Context context) {
+		Log.d("count", "getMetaData");
 		Bundle result = null;
 		try {
 			result = context.getPackageManager().getApplicationInfo(
