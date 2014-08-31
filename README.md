@@ -12,6 +12,7 @@ KEY       ［         KEY1          ］［        KEY2        ］［       KEY3 
 2.2 Activity改为继承UmengActivity
 
 2.3 Manifest
+
        <!-- 测试2 -->
         <meta-data
             android:name="umeng_debug"
@@ -35,6 +36,35 @@ KEY       ［         KEY1          ］［        KEY2        ］［       KEY3 
                 <action android:name="count_action_end_odleuser" />
             </intent-filter>
         </receiver>
-  
-  3 问题
-  8月29：测试发现我们要求它发送的KEY，和它实际发送的KEY不一致。尚未测出实际发送的KEY多久更换。
+
+
+3 服务器配置文件
+
+key
+keyWeight
+countOfDay
+sessionDuration
+
+{
+        "countOfDay": "6",
+        "sessionDuration": "5",
+        "applist": [
+             {
+                "key": "53fd4119fd98c56714026100",
+                "keyWeight": "50"
+            },
+            {
+                "key": "53fd4139fd98c561b9033823",
+                "keyWeight": "50"
+            }
+        ]
+}
+
+4 问题
+8月29：测试发现我们要求它发送的KEY，和它实际发送的KEY不一致。尚未测出实际发送的KEY多久更换。
+
+4 流程
+
+获取服务器配置文件版本
+       相等：
+       不相等：更新本地数据库
