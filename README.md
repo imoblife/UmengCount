@@ -41,27 +41,29 @@ KEY       ［         KEY1          ］［        KEY2        ］［       KEY3 
 3 服务器配置文件
 
 key
-keyWeight
 countOfDay
-sessionDuration
+pageDuration
 
 {
-        "countOfDay": "6",
-        "sessionDuration": "5",
         "applist": [
              {
-                "key": "53fd4119fd98c56714026100",
-                "keyWeight": "50"
+                "appKey": "1111111111111111111111111",
+                "countOfDay": "6",
+                "pageDuration": "5",
             },
             {
-                "key": "53fd4139fd98c561b9033823",
-                "keyWeight": "50"
+                "appKey": "2222222222222222222222222",
+                "countOfDay": "6",
+                "pageDuration": "5",
             }
         ]
 }
 
+数据库
+key    countOfDay    pageDuration  totalCounted
+
 4 问题
-8月29：测试发现我们要求它发送的KEY，和它实际发送的KEY不一致。尚未测出实际发送的KEY多久更换。
+8月29：测试发现我们要求它发送的KEY，和它实际发送的KEY不一致。尚未测出实际发送的KEY的更换机制。
 
 4 流程
 
