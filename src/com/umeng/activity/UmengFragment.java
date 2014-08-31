@@ -14,7 +14,7 @@ public class UmengFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		MobclickAgent.updateOnlineConfig(getActivity());
 		MobclickAgent.openActivityDurationTrack(false);
-		CountManager.instance(getActivity()).checkUmengConfig();
+		CountManager.instance(getActivity()).checkUmengConfigCleared();
 		pageName = CountManager.instance(getActivity()).getPageName();
 		
 		Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);

@@ -14,7 +14,7 @@ public abstract class UmengListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		MobclickAgent.updateOnlineConfig(this);
 		MobclickAgent.openActivityDurationTrack(false);
-		CountManager.instance(this).checkUmengConfig();
+		CountManager.instance(this).checkUmengConfigCleared();
 		pageName = CountManager.instance(this).getPageName();
 
 		Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);

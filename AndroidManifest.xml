@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.umeng.count"
-    android:versionCode="1"
-    android:versionName="2.0.test.1" >
+    android:versionCode="2"
+    android:versionName="2.0.test.2" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -129,9 +129,7 @@
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="count_action_rotation_newuser" />
                 <action android:name="count_action_rotation_odleuser" />
-                <action android:name="count_action_end_newuser" />
                 <action android:name="count_action_end_odleuser" />
             </intent-filter>
         </receiver>
