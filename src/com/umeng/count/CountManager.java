@@ -364,15 +364,16 @@ public class CountManager {
 	}
 
 	private boolean isCheckUpdate() {
-		
-		Log.d("count", "isCheckUpdate");
+
 
 		SharedPreferences sharedPreferences = mContext.getSharedPreferences(
 				CountName, 0);
 		long t = System.currentTimeMillis()
 				- sharedPreferences.getLong("prevT", 0);
 
-		return t > (1000 * 60 * 60 * 24);
+		boolean result = (t > 1000 * 60 * 60 * 24);
+		Log.d("count", "isCheckUpdate " + result);
+		return  result;
 
 	}
 
