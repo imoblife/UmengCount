@@ -198,10 +198,10 @@ public class CountManager {
 
 	private void startCountActivity(String name, String appId) {
 		MobclickAgent.openActivityDurationTrack(false);
-		Intent intent = new Intent(mContext, CountActivity.class);
-		intent.putExtra("name", name);
-		intent.putExtra("appId", appId);
-		mContext.startActivity(intent);
+//		Intent intent = new Intent(mContext, CountActivity.class);
+//		intent.putExtra("name", name);
+//		intent.putExtra("appId", appId);
+//		mContext.startActivity(intent);
 	}
 
 	private void startCountReceiver(String name, String action, String appId,
