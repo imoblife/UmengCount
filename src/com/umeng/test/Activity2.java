@@ -11,4 +11,9 @@ public class Activity2 extends UmengActivity {
 		this.setContentView(R.layout.main);
 		this.setTitle(getClass().getSimpleName());
 	}
+
+    @Override
+    public String getTrackModule() {
+        return getClass().getSimpleName();
+    }
 }

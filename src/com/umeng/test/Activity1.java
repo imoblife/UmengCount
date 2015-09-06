@@ -23,4 +23,9 @@ public class Activity1 extends UmengActivity {
 			}
 		});
 	}
+
+    @Override
+    public String getTrackModule() {
+        return getClass().getSimpleName();
+    }
 }

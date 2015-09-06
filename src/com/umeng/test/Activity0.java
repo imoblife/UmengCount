@@ -27,9 +27,14 @@ public class Activity0 extends UmengActivity {
 
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		// ¼ì²âÂÖÑµÄÖÖÓÊÇ·ñ´æ»î
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½
 		CountManager.instance(this).checkUpdateAlartRotation();
-		// ¼ì²â²ÎÊý¸üÐÂ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		CountManager.instance(this).updateCountProductData();
 	}
+
+    @Override
+    public String getTrackModule() {
+        return getClass().getSimpleName();
+    }
 }

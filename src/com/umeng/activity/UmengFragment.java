@@ -6,30 +6,41 @@ import android.util.Log;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.count.CountManager;
+import imoblife.android.app.track.TrackFragment;
 
-public class UmengFragment extends Fragment {
+public abstract class UmengFragment extends TrackFragment implements IUmengTrack {
 	private String pageName = "";
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MobclickAgent.updateOnlineConfig(getActivity());
-		MobclickAgent.openActivityDurationTrack(false);
-		CountManager.instance(getActivity()).checkUmengConfig();
-		pageName = CountManager.instance(getActivity()).getPageName();
-		
-		Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);
+		if (isUmengTrackEnabled()) {
+			MobclickAgent.updateOnlineConfig(getActivity());
+			MobclickAgent.openActivityDurationTrack(false);
+			CountManager.instance(getActivity()).checkUmengConfig();
+			pageName = CountManager.instance(getActivity()).getPageName();
+			Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);
+		}
 	}
 
 	public void onResume() {
 		super.onResume();
-		MobclickAgent.onPageStart(pageName);
-		MobclickAgent.onResume(getActivity(),
-				CountManager.instance(getActivity()).getKey(), "");
+		if (isUmengTrackEnabled()) {
+			MobclickAgent.onPageStart(pageName);
+			MobclickAgent.onResume(getActivity(),
+					CountManager.instance(getActivity()).getKey(), "");
+		}
 	}
 
 	public void onPause() {
 		super.onPause();
-		MobclickAgent.onPageEnd(pageName);
-		MobclickAgent.onPause(getActivity());
+		if (isUmengTrackEnabled()) {
+			MobclickAgent.onPageEnd(pageName);
+			MobclickAgent.onPause(getActivity());
+		}
+	}
+
+	@Override
+	public boolean isUmengTrackEnabled() {
+		return false;
 	}
 }
