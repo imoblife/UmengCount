@@ -7,28 +7,38 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
-public abstract class UmengPreferenceActivity extends PreferenceActivity {
+public class UmengPreferenceActivity extends PreferenceActivity  implements IUmengTrack  {
 	private String pageName = "";
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MobclickAgent.updateOnlineConfig(this);
-		MobclickAgent.openActivityDurationTrack(false);
-		CountManager.instance(this).checkUmengConfig();
-		pageName = CountManager.instance(this).getPageName();
-
-		Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);
+		if (isUmengTrackEnabled()) {
+			MobclickAgent.updateOnlineConfig(this);
+			MobclickAgent.openActivityDurationTrack(false);
+			CountManager.instance(this).checkUmengConfig();
+			pageName = CountManager.instance(this).getPageName();
+			Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);
+		}
 	}
 
 	public void onResume() {
 		super.onResume();
-		MobclickAgent.onPageStart(pageName);
-		MobclickAgent.onResume(this, CountManager.instance(this).getKey(), "");
+		if (isUmengTrackEnabled()) {
+			MobclickAgent.onPageStart(pageName);
+			MobclickAgent.onResume(this, CountManager.instance(this).getKey(), "");
+		}
 	}
 
 	public void onPause() {
 		super.onPause();
-		MobclickAgent.onPageEnd(pageName);
-		MobclickAgent.onPause(this);
+		if (isUmengTrackEnabled()) {
+			MobclickAgent.onPageEnd(pageName);
+			MobclickAgent.onPause(this);
+		}
+	}
+
+	@Override
+	public boolean isUmengTrackEnabled() {
+		return false;
 	}
 }
