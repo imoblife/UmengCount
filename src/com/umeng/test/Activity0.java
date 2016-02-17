@@ -27,9 +27,7 @@ public class Activity0 extends UmengActivity {
 
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		// 检测轮训闹钟是否存活
 		CountManager.instance(this).checkUpdateAlartRotation();
-		// 检测参数更新
 		CountManager.instance(this).updateCountProductData();
 	}
 }
