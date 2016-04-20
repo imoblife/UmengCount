@@ -14,7 +14,7 @@ public class UmengFragment extends Fragment  implements IUmengTrack {
 		super.onCreate(savedInstanceState);
 		if (isUmengTrackEnabled()) {
 			MobclickAgent.updateOnlineConfig(getActivity());
-			MobclickAgent.openActivityDurationTrack(false);
+			MobclickAgent.openActivityDurationTrack(isOpenActivityDurationTrack);
 			CountManager.instance(getActivity()).checkUmengConfig();
 			pageName = CountManager.instance(getActivity()).getPageName();
 			Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);
@@ -40,6 +40,6 @@ public class UmengFragment extends Fragment  implements IUmengTrack {
 
 	@Override
 	public boolean isUmengTrackEnabled() {
-		return false;
+		return isUmengTrackEnabled;
 	}
 }

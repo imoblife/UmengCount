@@ -14,7 +14,7 @@ public class UmengListActivity extends ListActivity  implements IUmengTrack {
 		super.onCreate(savedInstanceState);
 		if (isUmengTrackEnabled()) {
 			MobclickAgent.updateOnlineConfig(this);
-			MobclickAgent.openActivityDurationTrack(false);
+			MobclickAgent.openActivityDurationTrack(isOpenActivityDurationTrack);
 			CountManager.instance(this).checkUmengConfig();
 			pageName = CountManager.instance(this).getPageName();
 			Log.i(getClass().getSimpleName(), "onCreate(): " + pageName);
@@ -39,6 +39,6 @@ public class UmengListActivity extends ListActivity  implements IUmengTrack {
 
 	@Override
 	public boolean isUmengTrackEnabled() {
-		return false;
+		return isUmengTrackEnabled;
 	}
 }
