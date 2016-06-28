@@ -329,37 +329,37 @@ public class CountManager {
 
 		Log.d("count", "updateCountProductData");
 
-		if (isCheckUpdate()) {
-
-			Log.d("count", "updateCountProductData isCheckUpdate true");
-
-			new Thread() {
-
-				public void run() {
-
-					synchronized ("updateData") {
-						try {
-							int vc = getDataVcfromServer();
-							Log.d("count", "count vc=" + vc);
-							if (vc > getDataVCformLocal()) {
-								updateDBfromServer();
-								setDataVc(vc);
-								completeUpdate();
-								updateAlartRotation();
-								setPrevUpdateAlarmTime(System
-										.currentTimeMillis());
-							}
-						} catch (Exception e) {
-
-							e.printStackTrace();
-						}
-
-					}
-
-				}
-			}.start();
-
-		}
+//		if (isCheckUpdate()) {
+//
+//			Log.d("count", "updateCountProductData isCheckUpdate true");
+//
+//			new Thread() {
+//
+//				public void run() {
+//
+//					synchronized ("updateData") {
+//						try {
+//							int vc = getDataVcfromServer();
+//							Log.d("count", "count vc=" + vc);
+//							if (vc > getDataVCformLocal()) {
+//								updateDBfromServer();
+//								setDataVc(vc);
+//								completeUpdate();
+//								updateAlartRotation();
+//								setPrevUpdateAlarmTime(System
+//										.currentTimeMillis());
+//							}
+//						} catch (Exception e) {
+//
+//							e.printStackTrace();
+//						}
+//
+//					}
+//
+//				}
+//			}.start();
+//
+//		}
 
 	}
 
