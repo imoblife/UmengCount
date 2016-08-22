@@ -329,7 +329,7 @@ public class CountManager {
 
 		Log.d("count", "updateCountProductData");
 
-		if (isCheckUpdate()) {
+		if (checkTimeUp(CountName, "USER_PRESENT_COUNT", 60 * 60 * 1000L) && isCheckUpdate()) {
 
 			Log.d("count", "updateCountProductData isCheckUpdate true");
 
@@ -652,5 +652,39 @@ public class CountManager {
 					"umeng_general_config", 0);
 			umeng_sp.edit().clear().commit();
 		}
+	}
+
+	public boolean isTimeUp(String name, String key, long timeLimit) {
+		SharedPreferences sp = mContext.getSharedPreferences(name, Context.MODE_PRIVATE);
+		long current = System.currentTimeMillis();
+		long last = sp.getLong(key, 0);
+		long delta = current - last;
+		boolean res = (delta > timeLimit);
+		return res;
+	}
+
+	public void resetTimeUp(String name, String key) {
+		SharedPreferences sp = mContext.getSharedPreferences(name, Context.MODE_PRIVATE);
+		long current = System.currentTimeMillis();
+		sp.edit().putLong(key, current).commit();
+	}
+
+	public void setTimeUp(String name, String key, long time) {
+		SharedPreferences sp = mContext.getSharedPreferences(name, Context.MODE_PRIVATE);
+		sp.edit().putLong(key, time).commit();
+	}
+
+	public boolean checkTimeUp(String name, String key, long timeLimit) {
+		boolean res;
+
+		if(isTimeUp(name, key, timeLimit)) {
+			resetTimeUp(name, key);
+			res = true;
+		} else {
+			res = false;
+		}
+
+		Log.i(getClass().getSimpleName(), "checkTimeUp " + res);
+		return res;
 	}
 }
