@@ -13,7 +13,6 @@ public class UmengFragmentActivity extends FragmentActivity  implements IUmengTr
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (isUmengTrackEnabled()) {
-			MobclickAgent.updateOnlineConfig(this);
 			MobclickAgent.openActivityDurationTrack(false);
 			CountManager.instance(this).checkUmengConfig();
 			pageName = CountManager.instance(this).getPageName();
@@ -24,15 +23,13 @@ public class UmengFragmentActivity extends FragmentActivity  implements IUmengTr
 	public void onResume() {
 		super.onResume();
 		if (isUmengTrackEnabled()) {
-			MobclickAgent.onPageStart(pageName);
-			MobclickAgent.onResume(this, CountManager.instance(this).getKey(), "");
+			MobclickAgent.onResume(this);
 		}
 	}
 
 	public void onPause() {
 		super.onPause();
 		if (isUmengTrackEnabled()) {
-			MobclickAgent.onPageEnd(pageName);
 			MobclickAgent.onPause(this);
 		}
 	}

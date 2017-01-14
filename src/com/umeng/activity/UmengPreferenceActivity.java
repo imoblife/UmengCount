@@ -13,7 +13,6 @@ public class UmengPreferenceActivity extends PreferenceActivity  implements IUme
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (isUmengTrackEnabled()) {
-			MobclickAgent.updateOnlineConfig(this);
 			MobclickAgent.openActivityDurationTrack(false);
 			CountManager.instance(this).checkUmengConfig();
 			pageName = CountManager.instance(this).getPageName();
@@ -25,7 +24,7 @@ public class UmengPreferenceActivity extends PreferenceActivity  implements IUme
 		super.onResume();
 		if (isUmengTrackEnabled()) {
 			MobclickAgent.onPageStart(pageName);
-			MobclickAgent.onResume(this, CountManager.instance(this).getKey(), "");
+			MobclickAgent.onResume(this);
 		}
 	}
 

@@ -12,7 +12,6 @@ public class UmengActivity extends Activity implements IUmengTrack {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (isUmengTrackEnabled()) {
-            MobclickAgent.updateOnlineConfig(this);
             MobclickAgent.openActivityDurationTrack(false);
             CountManager.instance(this).checkUmengConfig();
             pageName = CountManager.instance(this).getPageName();
@@ -24,7 +23,7 @@ public class UmengActivity extends Activity implements IUmengTrack {
         super.onResume();
         if (isUmengTrackEnabled()) {
             MobclickAgent.onPageStart(pageName);
-            MobclickAgent.onResume(this, CountManager.instance(this).getKey(), "");
+            MobclickAgent.onResume(this);
         }
     }
 

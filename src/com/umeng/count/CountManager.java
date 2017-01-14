@@ -210,7 +210,7 @@ public class CountManager {
 
 		MobclickAgent.openActivityDurationTrack(false);
 		MobclickAgent.onPageStart(name); // 缁熻椤甸潰
-		MobclickAgent.onResume(mContext, appId, null);
+		MobclickAgent.onResume(mContext);
 		setEndAlarmTime(mContext, action, runT, name, appId);
 
 	}
@@ -620,7 +620,7 @@ public class CountManager {
 	//<meta-data android:name="umeng_key" android:value="..." />
 	public String getKey() {
 		Bundle b = getMetaData(mContext);
-		String s = b.getString("umeng_key");
+		String s = b.getString("UMENG_APPKEY");
 		Log.i(getClass().getSimpleName(), "getKey(): " + s);
 		return s;
 	}

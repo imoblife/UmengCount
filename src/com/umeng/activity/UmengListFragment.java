@@ -14,7 +14,6 @@ public class UmengListFragment extends ListFragment  implements IUmengTrack {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (isUmengTrackEnabled()) {
-			MobclickAgent.updateOnlineConfig(getActivity());
 			MobclickAgent.openActivityDurationTrack(false);
 			CountManager.instance(getActivity()).checkUmengConfig();
 			pageName = CountManager.instance(getActivity()).getPageName();
@@ -26,8 +25,6 @@ public class UmengListFragment extends ListFragment  implements IUmengTrack {
 		super.onResume();
 		if (isUmengTrackEnabled()) {
 			MobclickAgent.onPageStart(pageName);
-			MobclickAgent.onResume(getActivity(),
-					CountManager.instance(getActivity()).getKey(), "");
 		}
 	}
 
@@ -35,7 +32,6 @@ public class UmengListFragment extends ListFragment  implements IUmengTrack {
 		super.onPause();
 		if (isUmengTrackEnabled()) {
 			MobclickAgent.onPageEnd(pageName);
-			MobclickAgent.onPause(getActivity());
 		}
 	}
 
